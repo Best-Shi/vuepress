@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>贪 吃 蛇</title>
+    </head>
+
+    <body>
+        <h2 class="title">贪吃蛇</h2>
+        <!-- 游戏容器 -->
+        <div id="main">
+            <!-- 游戏舞台 -->
+            <div id="stage">
+                <!-- 设置蛇 -->
+                <div id="snake">
+                    <div></div>
+                </div>
+                <!-- 设置食物 -->
+                <div id="food">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <!-- 积分面板 -->
+            <div id="score-panel">
+                <div>SCORE: <span id="score">0</span></div>
+                <div>LEVEL:<span id="level">1</span></div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>By: Best Shi QQ: 1154957153</p>
+            <p>创建于: 2021-03-09</p>
+        </div>
+        <div id="dialog">
+            <div class="content">
+                <h2>游戏结束</h2>
+                <p id="msg"></p>
+                <div id="btn">重新开始</div>
+            </div>
+        </div>
+    </body>
+</html>

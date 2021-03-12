@@ -1,0 +1,124 @@
+@bg-color: #31e0c3;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font: bold 20px "courier";
+}
+
+.title {
+    text-align: center;
+    font: 48px "楷体";
+    margin-top: 40px;
+}
+
+.footer {
+    text-align: center;
+    font: 18px "宋体";
+}
+
+#main {
+    width: 360px;
+    height: 420px;
+    background: @bg-color;
+    margin: 40px auto;
+    border: 5px solid #000;
+    border-radius: 15px;
+    display: flex;
+    // 设置主轴方向
+    flex-flow: column;
+    // 设置侧轴对齐方式
+    align-items: center;
+    // 设置主轴对齐方式
+    justify-content: space-around;
+
+    // 游戏舞台
+    #stage {
+        width: 304px;
+        height: 304px;
+        border: 2px solid #000;
+        position: relative;
+
+        // 设置蛇
+        #snake {
+            & > div {
+                width: 10px;
+                height: 10px;
+                background: #000;
+                border: 1px solid @bg-color;
+                position: absolute;
+            }
+        }
+
+        #food {
+            width: 10px;
+            height: 10px;
+            background: @bg-color;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            align-content: space-between;
+            & > div {
+                width: 4px;
+                height: 4px;
+                background: #000;
+                transform: rotate(45deg);
+            }
+        }
+    }
+
+    // 记分牌
+    #score-panel {
+        width: 300px;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+#dialog {
+    display: none;
+    font-family: "宋体";
+    width: 280px;
+    height: 180px;
+    background: #dace67;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #333;
+    .content {
+        width: 280px;
+        height: 180px;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+
+        #btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background: #6d7a31;
+            color: #fff;
+            cursor: pointer;
+            margin-left: -1px;
+        }
+        #btn:hover {
+            background: #464e1f;
+        }
+        h2 {
+            color: red;
+            margin-top: 15px;
+        }
+        #message {
+            color: red;
+        }
+    }
+}

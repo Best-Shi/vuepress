@@ -122,7 +122,12 @@ module.exports = config({
                     icon: "ts",
                     collapsable: false,
                     prefix: "ts/",
-                    children: [""],
+                    children: [
+                        "",
+                        "TypeScript类型与配置笔记",
+                        "TypeScript面向对象笔记",
+                        "TypeScript案例",
+                    ],
                 },
             ],
             "/service/node": [
