@@ -27,4 +27,4 @@ TypeScript 笔记中所有使用到的[代码](https://gitee.com/bestshi/blog/tr
 
 :::
 
-![image-20210313003243205](/blog/images/image-20210313003243205.png)
+![image-20210313003243205](https://gitee.com/bestshi/blog/blob/master/docs/.vuepress/public/images/image-20210313003243205.png)
