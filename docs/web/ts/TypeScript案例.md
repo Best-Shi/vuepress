@@ -27,4 +27,4 @@ TypeScript 笔记中所有使用到的[代码](https://gitee.com/bestshi/blog/tr
 
 :::
 
-`<img :src="$withBase('/images/image-20210313003243205.png')" alt="贪吃蛇">`
+<img :src="$withBase('/images/image-20210313003243205.png')" alt="贪吃蛇">
