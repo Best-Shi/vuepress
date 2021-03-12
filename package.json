@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "vuepress dev docs --temp .temp",
-        "build": "vuepress build docs"
+        "build": "vuepress build docs && git add . && git commit -m 打包 && git pull && git push"
     },
     "keywords": [],
     "author": "",
