@@ -20,7 +20,7 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 
 :::
 
-## 简单渲染
+## 1、简单渲染
 
 ```html
 <body>
@@ -43,7 +43,7 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 
 <img :src="$withBase('/images/bestshi.com_2021-03-18_23-53-08.png')" >
 
-## 布尔值
+## 2、布尔值
 
 ```html
 <body>
@@ -66,7 +66,7 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 </body>
 ```
 
-## 循环简单数组
+## 3、循环简单数组
 
 ```html
 <body>
@@ -94,7 +94,7 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 
 <img :src="$withBase('/images/bestshi.com_2021-03-19_00-02-19.png')">
 
-## 循环对象数组
+## 4、循环对象数组
 
 ```html
 <body>
@@ -131,7 +131,7 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 
 <img :src="$withBase('/images/bestshi.com_2021-03-18_22-52-46.png')">
 
-## 数组嵌套
+## 5、数组嵌套
 
 ```html
 <body>
