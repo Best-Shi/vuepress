@@ -149,7 +149,11 @@ module.exports = config({
                             title: "mustache模板引擎",
                             icon: "vue",
                             prefix: "mustache/",
-                            children: ["数据变为视图方式", "mustache基本使用"],
+                            children: [
+                                "数据变为视图方式",
+                                "mustache基本使用",
+                                "mustache源码解析",
+                            ],
                         },
                     ],
                 },
