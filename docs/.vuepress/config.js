@@ -144,7 +144,13 @@ module.exports = config({
                     icon: "vue",
                     collapsable: false,
                     prefix: "vue/",
-                    children: ["mustache模板引擎"],
+                    children: [
+                        {
+                            title: "mustache模板引擎",
+                            icon: "vue",
+                            children: ["数据变为视图方式"],
+                        },
+                    ],
                 },
             ],
             "/service/node": [
