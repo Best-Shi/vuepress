@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>数组join法</title>
+</head>
+
+<body>
+    <ul id="list"></ul>
+    <script>
+        let arr = [
+            { name: "小明", age: 12, sex: "男" },
+            { name: "小红", age: 11, sex: "女" },
+            { name: "小强", age: 13, sex: "男" },
+        ];
+
+        let list = document.getElementById("list");
+        for (let i = 0; i < arr.length; i++) {
+            list.innerHTML += [
+                "<li>",
+                '    <div class="hd">', arr[i].name, "基本信息</div>",
+                '    <div class="bd">',
+                "        <p>姓名：", arr[i].name, "</p>",
+                "        <p>年龄：", arr[i].age, "</p>",
+                "        <p>性别：", arr[i].sex, "</p>",
+                "    </div>",
+                "</li>",
+            ].join("");
+        }
+    </script>
+</body>
+
+</html>

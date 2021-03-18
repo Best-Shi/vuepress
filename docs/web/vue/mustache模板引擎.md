@@ -22,11 +22,17 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 
 ## 历史上曾经出现的数据变为视图的
 
+::: tip 渲染效果
+
+<img :src="$withBase('/images/bestshi.com_2021-03-18_22-52-46.png')" >
+
+:::
+
 ### 纯 DOM 法
 
 > 非常笨拙，没有实战价值
 
-```html js
+```html
 <body>
     <ul id="list"></ul>
     <script>
@@ -65,15 +71,75 @@ mustache.js 是一个简单强大的 JavaScript 模板引擎,使用它可以简�
 </body>
 ```
 
-<img :src="$withBase('/images/bestshi.com_2021-03-18_22-52-46.png')" alt="DOM法渲染列表">
-
 ### 数组 join 法
 
 > 曾几何时非常流行，是曾经的前端必会知识
 
+```html
+<body>
+    <ul id="list"></ul>
+    <script>
+        let arr = [
+            { name: "小明", age: 12, sex: "男" },
+            { name: "小红", age: 11, sex: "女" },
+            { name: "小强", age: 13, sex: "男" },
+        ];
+
+        let list = document.getElementById("list");
+        for (let i = 0; i < arr.length; i++) {
+            list.innerHTML += [
+                "<li>",
+                '    <div class="hd">',
+                arr[i].name,
+                "基本信息</div>",
+                '    <div class="bd">',
+                "        <p>姓名：",
+                arr[i].name,
+                "</p>",
+                "        <p>年龄：",
+                arr[i].age,
+                "</p>",
+                "        <p>性别：",
+                arr[i].sex,
+                "</p>",
+                "    </div>",
+                "</li>",
+            ].join("");
+        }
+    </script>
+</body>
+```
+
 ### ES6 反引号法：
 
 > ES6 中新增的`${a}`语法糖
+
+```html
+<body>
+    <ul id="list"></ul>
+    <script>
+        let arr = [
+            { name: "小明", age: 12, sex: "男" },
+            { name: "小红", age: 11, sex: "女" },
+            { name: "小强", age: 13, sex: "男" },
+        ];
+
+        let list = document.getElementById("list");
+        for (let i = 0; i < arr.length; i++) {
+            list.innerHTML += `
+            <li>
+                <div class=hd>${arr[i].name}基本信息</div>
+                <div class=bd>
+                    <p>姓名：${arr[i].name}</p>
+                    <p>年龄：${arr[i].age}</p>
+                    <p>性别：${arr[i].sex}</p>
+                </div>
+            </li>
+            `;
+        }
+    </script>
+</body>
+```
 
 ### 模板引擎
 
