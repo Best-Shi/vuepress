@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html lang='zh-CN'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <script src="./js/mustache.js"></script>
+    <script>
+        let templateStr = `
+            <ul>
+                {{#arr}}
+                    <li>{{.}}</li>
+                {{/arr}}
+            </ul>
+        `
+
+        let data = {
+            arr: ['A', 'B', 'C', 'D', 'E', 'F']
+        }
+
+        let domStr = Mustache.render(templateStr, data)
+        document.getElementById('container').innerHTML = domStr
+    </script>
+</body>
+
+</html>
