@@ -60,6 +60,7 @@ module.exports = config({
                     { text: "HTML", link: "html/", icon: "html5" },
                     { text: "JavaScript", link: "js/", icon: "js" },
                     { text: "TypeScript", link: "ts/", icon: "ts" },
+                    { text: "Vue", link: "vue/", icon: "vue" },
                 ],
             },
             {
@@ -128,6 +129,22 @@ module.exports = config({
                         "TypeScript面向对象笔记",
                         "TypeScript案例",
                     ],
+                },
+            ],
+            "/web/vue": [
+                {
+                    title: "Vue 基本使用",
+                    icon: "vue",
+                    collapsable: false,
+                    prefix: "vue/",
+                    children: [""],
+                },
+                {
+                    title: "Vue 源码解析",
+                    icon: "vue",
+                    collapsable: false,
+                    prefix: "vue/",
+                    children: ["mustache模板引擎"],
                 },
             ],
             "/service/node": [
