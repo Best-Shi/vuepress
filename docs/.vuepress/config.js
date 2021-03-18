@@ -152,7 +152,7 @@ module.exports = config({
                             children: [
                                 "数据变为视图方式",
                                 "mustache基本使用",
-                                "mustache源码解析",
+                                "手写mustache模板引擎",
                             ],
                         },
                     ],
