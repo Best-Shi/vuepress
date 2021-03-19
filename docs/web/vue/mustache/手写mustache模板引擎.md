@@ -13,7 +13,13 @@ category: vue
 
 # 手写 mustache 模板引擎
 
-::: tip mustache 原理
+::: tip 源码地址
+
+[源码地址](https://gitee.com/bestshi/blog/tree/master/src/vue/mustahe)
+
+:::
+
+::: info mustache 原理
 
 mustache 原理是将模板字符串编译成 tokens 数组，然后把数据跟 tokens 数组结合解析成 DOM 字符串。
 
@@ -131,9 +137,13 @@ module.exports = {
 ...略...
 ```
 
-### 2.4、实现 Scanner 类
+## 3、源码实现
+
+### 3.1、模板字符串转为平扁 tokens
 
 ::: info Scanner 类说明
+
+创建 Scanner 类，实现对模板字符串的扫描，并转换成平扁的 tokens
 
 扫描类，用于移动指针记录指针位置，并返回指针经过的字符串。
 
@@ -193,7 +203,7 @@ export default class Scanner {
 }
 ```
 
-### 2.5、将模板字符串转为 tokens 数组
+### 3.2、将模板字符串转为 tokens 数组
 
 ::: info 实现效果
 
@@ -315,3 +325,158 @@ export default function nestTokens(tokens) {
     return nestedTokens;
 }
 ```
+
+### 3.3、将 tokens 转换成 DOM 字符串
+
+::: info 实现原理
+
+-   ==renderTemplate== 函数通过遍历 tokens 数组，判断类型，并拼接到 DOM 字符串中；
+-   如果是`text`就直接拼接，如果是`name`就从数据中获取对应的值进行拼接，如果是`#`则把 token 交给 ==parseArray== 函数进行处理后再进行拼接。
+-   因为 ==renderTemplate== 函数已经实现了 DOM 字符串拼接，所以 ==parseArray== 函数中就循环需要处理的数据，并调用 ==renderTemplate== 函数进行递归拼接。
+-   当`name`的值为`.`或者`a.b.c`的时候 JavaScript 无法识别，会导致报错，所以创建 ==lookup== 函数进行处理。
+
+:::
+
+**renderTemplate 函数与 parseArray 函数：**
+
+```js
+/**
+ * 函数功能：让tokens数组转换为dom字符串
+ */
+
+import lookup from "./lookup.js";
+
+export default function renderTemplate(tokens, data) {
+    let resultStr = "";
+    // 遍历tokens
+    for (let i = 0; i < tokens.length; i++) {
+        let token = tokens[i];
+        // 判断类型
+        if (token[0] === "text") {
+            resultStr += token[1];
+        } else if (token[0] === "name") {
+            resultStr += lookup(data, token[1]);
+        } else if (token[0] === "#") {
+            resultStr += parseArray(token, data);
+        }
+    }
+    return resultStr;
+}
+
+/**
+ * 处理数组，结合renderTemplate实现递归
+ */
+function parseArray(token, data) {
+    // 得到整体数据中要使用的部分
+    let val = lookup(data, token[1]);
+    let resultStr = "";
+    // 遍历val数组
+    for (let i = 0; i < val.length; i++) {
+        resultStr += renderTemplate(token[2], {
+            // 相当于val[i]本身
+            ...val[i],
+            // 补充一个 . 属性
+            ".": val[i],
+        });
+    }
+    return resultStr;
+}
+```
+
+**lookup 函数：**
+
+```js
+/**
+ * 函数功能: 可以再obj对象中，寻找连续点符合的keyName属性
+ */
+
+export default function lookup(obj, keyName) {
+    if (keyName.indexOf(".") > 0 && keyName !== ".") {
+        let keys = keyName.split(".");
+        let temp = obj;
+
+        for (let i = 0; i < keys.length; i++) {
+            temp = temp[keys[i]];
+        }
+        return temp;
+    }
+    return obj[keyName];
+}
+```
+
+## 4、功能测试
+
+### 4.1、数组嵌套测试
+
+```js
+import templateToTokens from "./modules/templateToTokens.js";
+import renderTemplate from "./modules/renderTemplate.js";
+
+let container = document.getElementById("container");
+
+let templateStr = `
+          <ul>
+            {{#arr}}
+            <li class='item'>
+                {{name}} 的爱好是:
+                <ol>
+                    {{#hobbies}}
+                    <li>{{.}}</li>
+                    {{/hobbies}}
+                </ol>
+            </li>
+            {{/arr}}
+        </ul>
+        `;
+
+let data = {
+    arr: [
+        { name: "小明", age: 12, hobbies: ["抽烟", "喝酒", "烫头"] },
+        { name: "小红", age: 11, hobbies: ["看书", "游泳"] },
+        { name: "小强", age: 13, hobbies: ["王者荣耀", "吃鸡"] },
+    ],
+};
+
+function BS_template_render(templateStr, data) {
+    let tokens = templateToTokens(templateStr);
+    let domSrt = renderTemplate(tokens, data);
+    return domSrt;
+}
+
+let domSrt = BS_template_render(templateStr, data);
+
+container.innerHTML = domSrt;
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-03-19_18-25-55.png')">
+
+### 4.2、简单渲染测试
+
+```js
+import templateToTokens from "./modules/templateToTokens.js";
+import renderTemplate from "./modules/renderTemplate.js";
+
+let container = document.getElementById("container");
+
+let templateStr = "<h1>我买了一个{{thing}}，花了{{a.b}}元，好{{mood}}啊!</h1>";
+
+let data = {
+    thing: "华为手机",
+    mood: "开心",
+    a: {
+        b: 12,
+    },
+};
+
+function BS_template_render(templateStr, data) {
+    let tokens = templateToTokens(templateStr);
+    let domSrt = renderTemplate(tokens, data);
+    return domSrt;
+}
+
+let domSrt = BS_template_render(templateStr, data);
+
+container.innerHTML = domSrt;
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-03-19_18-27-42.png')">

@@ -1,4 +1,5 @@
 import templateToTokens from "./modules/templateToTokens.js";
+import renderTemplate from "./modules/renderTemplate.js";
 
 let container = document.getElementById("container");
 
@@ -25,16 +26,22 @@ let container = document.getElementById("container");
 //     ],
 // };
 
-let templateStr = "<h1>我买了一个{{thing}}, 好{{mood}}啊!</h1>";
+let templateStr = "<h1>我买了一个{{thing}}，花了{{a.b}}元，好{{mood}}啊!</h1>";
 
 let data = {
     thing: "华为手机",
     mood: "开心",
+    a: {
+        b: 12,
+    },
 };
 
 function BS_template_render(templateStr, data) {
     let tokens = templateToTokens(templateStr);
-    console.log(tokens);
+    let domSrt = renderTemplate(tokens, data);
+    return domSrt;
 }
 
-BS_template_render(templateStr, data);
+let domSrt = BS_template_render(templateStr, data);
+
+container.innerHTML = domSrt;
