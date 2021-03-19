@@ -15,7 +15,7 @@ category: vue
 
 ::: tip 源码地址
 
-[源码地址](https://gitee.com/bestshi/blog/tree/master/src/vue/mustahe)
+[源码地址](https://gitee.com/bestshi/blog/tree/master/src/vue/mustache)
 
 :::
 
