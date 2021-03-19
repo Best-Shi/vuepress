@@ -123,3 +123,54 @@ const newVnode = h("div#container.two.classes", { on: { click: () => {} } }, [
 // Second `patch` invocation
 patch(vnode, newVnode); // Snabbdom efficiently updates the old view to the new state
 ```
+
+### 1.3、虚拟 DOM 与 h 函数学习
+
+::: info h 函数
+
+h 函数用来生成虚拟节点（vnode）。
+
+**参数：**
+
+-   sel：标签名称
+-   props：标签属性
+-   children：子节点
+
+**返回值：**
+
+-   children：表示子元素。
+-   data：元素属性。
+-   elm：表示是否上树。
+-   key：元素唯一标识。
+-   sel：表示选择器。
+-   text：元素中的文字。
+
+<img :src="$withBase('/images/bestshi.com_2021-03-20_01-09-52.png')">
+
+:::
+
+#### 1.3.1、案例
+
+```js
+// 创建patch函数
+const patch = init([
+    classModule,
+    propsModule,
+    styleModule,
+    eventListenersModule,
+]);
+
+// 创建虚拟节点
+let myVnode = h("ul", [
+    h("li", {}, "苹果"),
+    h("li", { class: { active: true } }, "香蕉"),
+]);
+
+console.log(myVnode2);
+
+// 虚拟DOM上树
+const container = document.getElementById("container");
+patch(container, myVnode);
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-03-20_01-13-52.png')">
