@@ -155,6 +155,12 @@ module.exports = config({
                                 "手写mustache模板引擎",
                             ],
                         },
+                        {
+                            title: "虚拟DOM与diff算法",
+                            icon: "vue",
+                            prefix: "diff/",
+                            children: ["虚拟DOM与diff算法"],
+                        },
                     ],
                 },
             ],
