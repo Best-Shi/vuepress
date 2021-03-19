@@ -26,7 +26,7 @@ export default class Scanner {
         const posStart = this.pos;
 
         // 当尾巴不是stopTag的时候，说明还没扫描到stopTag
-        while (!this.eos() && this.tail.indexOf(stopTag) !== 0) {
+        while (this.eos() && this.tail.indexOf(stopTag) !== 0) {
             // 移动指针
             this.pos++;
             // 改变尾巴
@@ -39,6 +39,6 @@ export default class Scanner {
 
     // 判断指针是否到头，返回布尔值  end of string
     eos() {
-        return this.pos >= this.templageStr.length;
+        return this.pos <= this.templageStr.length;
     }
 }

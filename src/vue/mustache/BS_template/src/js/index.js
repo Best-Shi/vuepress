@@ -1,9 +1,29 @@
-import { render } from "../../../js/mustache.js";
-import Scanner from "./modules/Scanner.js";
+import templateToTokens from "./modules/templateToTokens.js";
 
 let container = document.getElementById("container");
 
-console.log(container);
+// let templateStr = `
+//           <ul>
+//             {{#arr}}
+//             <li class='item'>
+//                 {{name}} 的爱好是:
+//                 <ol>
+//                     {{#hobbies}}
+//                     <li>{{.}}</li>
+//                     {{/hobbies}}
+//                 </ol>
+//             </li>
+//             {{/arr}}
+//         </ul>
+//         `;
+
+// let data = {
+//     arr: [
+//         { name: "小明", age: 12, hobbies: ["抽烟", "喝酒", "烫头"] },
+//         { name: "小红", age: 11, hobbies: ["看书", "游泳"] },
+//         { name: "小强", age: 13, hobbies: ["王者荣耀", "吃鸡"] },
+//     ],
+// };
 
 let templateStr = "<h1>我买了一个{{thing}}, 好{{mood}}啊!</h1>";
 
@@ -13,16 +33,8 @@ let data = {
 };
 
 function BS_template_render(templateStr, data) {
-    let scanner = new Scanner(templateStr);
-    let words;
-    while (!scanner.eos()) {
-        words = scanner.scanUtil("{{");
-        scanner.scan("{{");
-        console.log(words);
-        words = scanner.scanUtil("}}");
-        scanner.scan("}}");
-        console.log(words);
-    }
+    let tokens = templateToTokens(templateStr);
+    console.log(tokens);
 }
 
-BS_template_render(templateStr);
+BS_template_render(templateStr, data);
