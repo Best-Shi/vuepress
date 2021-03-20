@@ -26,7 +26,7 @@ category: vue
 
 -   新虚拟 DOM 和老虚拟 DOM 进行 diff（精细化比较），算出应该如何最小量更新，最后反映到真正的 DO
 
-## 1、snabbdom 库学习
+## snabbdom 库安装
 
 ::: tip
 
@@ -34,15 +34,13 @@ Snabbdom 由一个非常简单，高性能和可扩展的内核组成，仅约 2
 
 :::
 
-### 1.1、snabbdom 库安装
-
 ```shell
 npm install -D snabbdom
 ```
 
-### 1.2、snabbdom 测试环境搭建
+## snabbdom 测试环境搭建
 
-#### 1.2.1、安装依赖
+### 安装依赖
 
 ```shell
 npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugin
@@ -58,7 +56,7 @@ npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugin
 
 :::
 
-#### 1.2.2、配置 webpack.config.js 文件
+### 配置 webpack.config.js 文件
 
 ```js
 const { resolve } = require("path");
@@ -83,7 +81,7 @@ module.exports = {
 };
 ```
 
-#### 1.2.3、运行测试案例
+### 运行测试案例
 
 ```js
 import { init } from "snabbdom/init";
@@ -124,7 +122,7 @@ const newVnode = h("div#container.two.classes", { on: { click: () => {} } }, [
 patch(vnode, newVnode); // Snabbdom efficiently updates the old view to the new state
 ```
 
-### 1.3、虚拟 DOM 与 h 函数学习
+## 虚拟 DOM 与 h 函数学习
 
 ::: info h 函数
 
@@ -149,7 +147,7 @@ h 函数用来生成虚拟节点（vnode）。
 
 :::
 
-#### 1.3.1、案例
+### 案例
 
 ```js
 // 创建patch函数
@@ -166,11 +164,105 @@ let myVnode = h("ul", [
     h("li", { class: { active: true } }, "香蕉"),
 ]);
 
-console.log(myVnode2);
-
 // 虚拟DOM上树
 const container = document.getElementById("container");
 patch(container, myVnode);
 ```
 
 <img :src="$withBase('/images/bestshi.com_2021-03-20_01-13-52.png')">
+
+### 手写低配版 h 函数
+
+**vnode 函数：**
+
+```js
+// vnode就是把传入的5个参数组合成对象返回
+
+export default function vnode(sel, data, children, text, elm) {
+    return {
+        sel,
+        data,
+        children,
+        text,
+        elm,
+    };
+}
+```
+
+**h 函数：**
+
+```js
+import vnode from "./vnode.js";
+
+/**
+ * 这个函数只实现3个参数功能，缺一不可
+ * 调用形态必须为下面三种之一：
+ *  形态① h('div', {}, '文字')
+ *  形态② h('div', {}, [])
+ *  形态③ h('div', {}, h())
+ */
+
+export default function h(sel, data, c) {
+    // 检测参数个数
+    if (arguments.length !== 3) throw new Error("h函数必须传入三个参数");
+
+    // 检测参数c的类型
+
+    if (typeof c === "string" || typeof c === "number") {
+        // 说明是形态①
+        return vnode(sel, data, undefined, c, undefined);
+    } else if (Array.isArray(c)) {
+        // 说明是形态②
+        // 收集children
+        let children = [];
+        for (let i = 0; i < c.length; i++) {
+            // 检测c[i]
+            if (!(typeof c[i] === "object" && c[i].hasOwnProperty("sel")))
+                throw new Error("传入的数组参数中有项不是h函数");
+            children.push(c[i]);
+        }
+        return vnode(sel, data, children, undefined, undefined);
+    } else if (typeof c === "object" && c.hasOwnProperty("sel")) {
+        // 说明是形态③
+        // 传入的c是唯一的children
+        return vnode(sel, data, [c], undefined, undefined);
+    } else {
+        throw new Error("传入的第三个参数类型不对");
+    }
+}
+```
+
+**测试：**
+
+```js
+// 引入自己的h函数
+import h from "./mySnabbdom/h.js";
+
+import { init } from "snabbdom/init";
+import { classModule } from "snabbdom/modules/class";
+import { propsModule } from "snabbdom/modules/props";
+import { styleModule } from "snabbdom/modules/style";
+import { eventListenersModule } from "snabbdom/modules/eventlisteners";
+
+// 创建patch函数
+const patch = init([
+    classModule,
+    propsModule,
+    styleModule,
+    eventListenersModule,
+]);
+
+let myVnode1 = h("div", {}, [
+    h("p", {}, "你好"),
+    h("p", {}, "你好"),
+    h("p", {}, h("span", {}, "hello")),
+]);
+
+console.log(myVnode1);
+
+// 虚拟DOM上树
+const container = document.getElementById("container");
+patch(container, myVnode1);
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-03-20_15-34-42.png')">
