@@ -18,14 +18,6 @@ category: vue
 
 -   用 JavaScript 对象描述 DOM 的层次结构。DOM 中的一切属性都在虚拟 DOM 中有对应的属性。
 
-**diff 算法：**
-
--   diff 算法可以进行精细化比对，实现最小量更新。
-
--   diff 算法只发生在虚拟 DOM 上。
-
--   新虚拟 DOM 和老虚拟 DOM 进行 diff（精细化比较），算出应该如何最小量更新，最后反映到真正的 DO
-
 ## snabbdom 库安装
 
 ::: tip
@@ -258,11 +250,128 @@ let myVnode1 = h("div", {}, [
     h("p", {}, h("span", {}, "hello")),
 ]);
 
-console.log(myVnode1);
-
 // 虚拟DOM上树
 const container = document.getElementById("container");
 patch(container, myVnode1);
 ```
 
 <img :src="$withBase('/images/bestshi.com_2021-03-20_15-34-42.png')">
+
+## diff 算法
+
+::: tip diff 算法
+
+-   diff 算法可以进行精细化比对，实现最小量更新。
+-   diff 算法只发生在虚拟 DOM 上。
+-   新虚拟 DOM 和老虚拟 DOM 进行 diff（精细化比较），算出应该如何最小量更新，最后反映到真正的 DO
+
+-   diff 只进行同层比较，不会进行跨层比较。即使是同一片虚拟节点，但是跨层了，diff 不进行比较，而是直接删除旧的，然后插入新的。
+-   diff 只有是同一个虚拟节点（选择器相同，kye 相同视为同一个节点），才会进行精细化比较，否则直接删除旧的，然后插入新的。
+-   diff 同一节点内会实现精细化比较，当然，key 很重要，key 是这个节点的唯一标识，告诉 diff 算法，在更新前后它们是同一个节点。
+
+:::
+
+### diff 处理新旧节点不是同一个节点
+
+**crateElement：**
+
+::: tip
+用于递归创建子节点
+:::
+
+```js
+/**
+ * 创建节点
+ */
+
+export default function createElement(vnode) {
+    // 创建一个DOM节点
+    let domNode = document.createElement(vnode.sel);
+
+    // 判断是有子节点还是文本
+    if (
+        vnode.text !== "" &&
+        (vnode.children === undefined || vnode.children.length === 0)
+    ) {
+        // 是文本
+        domNode.innerText = vnode.text;
+    } else {
+        // 是节点
+        for (let i = 0; i < vnode.children.length; i++) {
+            // 当前的children
+            let ch = vnode.children[i];
+            // 创建出它的DOM
+            let chDOM = createElement(ch);
+            // 上树
+            domNode.appendChild(chDOM);
+        }
+    }
+    // 补充elm属性
+    vnode.elm = domNode;
+    // 返回elm，elm是一个纯DOM对象
+    return vnode.elm;
+}
+```
+
+**patch：**
+
+```js
+import vnode from "./vnode.js";
+import createElement from "./createElement.js";
+
+export default function patch(oldVnode, newVnode) {
+    // 判断传入的一个参数，是DOM节点还是虚拟节点
+    if (oldVnode.sel === "" || oldVnode.sel === undefined) {
+        // oldVnode是DOM节点
+        oldVnode = vnode(
+            oldVnode.tagName.toLowerCase(),
+            {},
+            [],
+            undefined,
+            oldVnode
+        );
+    }
+
+    // 判断oldVnode和newVnode是不是同一个节点
+    if (oldVnode.key === newVnode.key && oldVnode.sel === newVnode.sel) {
+        // 是同一个节点
+    } else {
+        let newVnodeElm = createElement(newVnode);
+
+        // 插入到老节点之前
+        if (oldVnode.elm.parentNode && newVnodeElm) {
+            oldVnode.elm.parentNode.insertBefore(newVnodeElm, oldVnode.elm);
+        }
+
+        // 删除老节点
+        oldVnode.elm.parentNode.removeChild(oldVnode.elm);
+    }
+}
+```
+
+**测试：**
+
+```js
+import h from "./mySnabbdom/h.js";
+import patch from "./mySnabbdom/patch.js";
+
+let myVnode1 = h("h1", {}, "你好");
+
+let myVnode2 = h("ul", {}, [
+    h("li", {}, "你好"),
+    h("li", {}, "你好"),
+    h("li", {}, h("span", {}, "hello")),
+]);
+
+// 虚拟DOM上树
+const container = document.getElementById("container");
+const btn = document.getElementById("btn");
+patch(container, myVnode1);
+
+// 点击改变DOM
+btn.onclick = function() {
+    patch(myVnode1, myVnode2);
+};
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-03-20_23-44-02.png')">
