@@ -263,21 +263,55 @@ patch(container, myVnode1);
 
 -   diff 算法可以进行精细化比对，实现最小量更新。
 -   diff 算法只发生在虚拟 DOM 上。
--   新虚拟 DOM 和老虚拟 DOM 进行 diff（精细化比较），算出应该如何最小量更新，最后反映到真正的 DO
+-   新虚拟 DOM 和老虚拟 DOM 进行 diff（精细化比较），算出应该如何最小量更新，最后反映到真正的 DOM
 
 -   diff 只进行同层比较，不会进行跨层比较。即使是同一片虚拟节点，但是跨层了，diff 不进行比较，而是直接删除旧的，然后插入新的。
 -   diff 只有是同一个虚拟节点（选择器相同，kye 相同视为同一个节点），才会进行精细化比较，否则直接删除旧的，然后插入新的。
 -   diff 同一节点内会实现精细化比较，当然，key 很重要，key 是这个节点的唯一标识，告诉 diff 算法，在更新前后它们是同一个节点。
 
+**diff 算法流程图(简易版本)**
+
+<img :src="$withBase('/images/diff.jpg')">
+
 :::
 
-### diff 处理新旧节点不是同一个节点
+### diff 算法工作流程
+
+::: tip diff 算法大致流程
+
+-   1、patch 函数调用，接收两个值，旧虚拟 DOM（oldVnode）与新虚拟 DOM（vnode）。
+-   2、判断 oldVnode 是否是虚拟节点。
+    -   不是虚拟节点：通过 vnode 函数将 oldVnode 转换成虚拟节点。
+-   3、oldVnode 是虚拟节点，则判断 oldVnode 与 vnode 是否是同一个节点。
+    -   不是同一个节点：插入新节点，删旧节点。
+-   4、是同一个节点，则判断 oldVnode 与 vnode 是不是内存种的同一个对象。
+    -   是同一个对象：什么都不做。
+-   5、不是同一个对象，则判断 vnode 有没有 text。
+    -   有 text：判断 oldVnode 的 text 与 vnode 的 text 是否相同。
+        -   text 相同：什么都不做。
+        -   text 不相同：则把 oldVnode.elm 中的 innerText 改为 newVnode 的 text。
+-   6、vnode 没有 text，则判读 children。
+    -   vnode 中有 children：清空 oldVnode 中的 text，并且把 vnode 的 children 添加到 DOM 中。
+    -   oldVnode 中有 children：清空 oldVnode 中的 children。
+    -   oldVnode 中有 text：清空 oldVnode 中的 text。
+-   7、oldVnode 与 vnode 中都有 children，则进行精细化比较。精细化比较提供四种命中方式：
+    1. 新前与旧前（命中后，新前与旧前指针++）
+    2. 新后与旧后（命中后，新增指针++，旧后指针--）
+    3. 新后与旧前（命中后，新前指向的节点，移动到旧后之后新后指针--，旧前指针++）
+    4. 新前与旧后（命中后，新前指向的节点，移动到旧前之前新前指针++，旧后指针--）
+-   8、如果四种命中方式都没命中，则进行循环查找，如果没有找到，则新曾的节点，插入到当前旧前指针之前；如果找到，则判断新旧节点 sel，相同则新曾的节点，插入到当前旧前指针之前，不相同则进行 patchVnode，把旧节点标记为 undefined，新插入到当前旧前指针之前。循环完以后新前指针++。
+
+:::
+
+### diff 算法简易版代码
+
+::: tip 代码地址
+
+[代码地址](https://gitee.com/bestshi/blog/tree/master/src/vue/mustache)
+
+:::
 
 **crateElement：**
-
-::: tip
-用于递归创建子节点
-:::
 
 ```js
 /**
@@ -290,12 +324,12 @@ export default function createElement(vnode) {
 
     // 判断是有子节点还是文本
     if (
-        vnode.text !== "" &&
-        (vnode.children === undefined || vnode.children.length === 0)
+        vnode.text != "" &&
+        (vnode.children == undefined || vnode.children.length == 0)
     ) {
         // 是文本
         domNode.innerText = vnode.text;
-    } else {
+    } else if (Array.isArray(vnode.children) && vnode.children.length > 0) {
         // 是节点
         for (let i = 0; i < vnode.children.length; i++) {
             // 当前的children
@@ -318,10 +352,11 @@ export default function createElement(vnode) {
 ```js
 import vnode from "./vnode.js";
 import createElement from "./createElement.js";
+import patchVnode from "./patchVnode.js";
 
 export default function patch(oldVnode, newVnode) {
     // 判断传入的一个参数，是DOM节点还是虚拟节点
-    if (oldVnode.sel === "" || oldVnode.sel === undefined) {
+    if (oldVnode.sel == "" || oldVnode.sel == undefined) {
         // oldVnode是DOM节点
         oldVnode = vnode(
             oldVnode.tagName.toLowerCase(),
@@ -333,8 +368,8 @@ export default function patch(oldVnode, newVnode) {
     }
 
     // 判断oldVnode和newVnode是不是同一个节点
-    if (oldVnode.key === newVnode.key && oldVnode.sel === newVnode.sel) {
-        // 是同一个节点
+    if (oldVnode.key == newVnode.key && oldVnode.sel == newVnode.sel) {
+        patchVnode(oldVnode, newVnode);
     } else {
         let newVnodeElm = createElement(newVnode);
 
@@ -349,29 +384,174 @@ export default function patch(oldVnode, newVnode) {
 }
 ```
 
-**测试：**
+**patchVnode：**
 
 ```js
-import h from "./mySnabbdom/h.js";
-import patch from "./mySnabbdom/patch.js";
+import createElement from "./createElement.js";
+import updateChildren from "./updateChildren.js";
 
-let myVnode1 = h("h1", {}, "你好");
+export default function patchVnode(oldVnode, newVnode) {
+    // 判读新旧vnode是不是同一个
+    if (oldVnode == newVnode) return;
+    // 判断vnode有没有text属性
+    if (
+        newVnode.text != undefined &&
+        (newVnode.children == undefined || newVnode.children.length == 0)
+    ) {
+        // 新vnode有text属性
+        if (newVnode.text != oldVnode.text) {
+            oldVnode.elm.innerText = newVnode.text;
+        }
+    } else {
+        // 新vnode没有text属性
 
-let myVnode2 = h("ul", {}, [
-    h("li", {}, "你好"),
-    h("li", {}, "你好"),
-    h("li", {}, h("span", {}, "hello")),
-]);
-
-// 虚拟DOM上树
-const container = document.getElementById("container");
-const btn = document.getElementById("btn");
-patch(container, myVnode1);
-
-// 点击改变DOM
-btn.onclick = function() {
-    patch(myVnode1, myVnode2);
-};
+        // 判断老的有没有children
+        if (oldVnode.children != undefined && oldVnode.children.length > 0) {
+            // 新老节点都有children
+            updateChildren(oldVnode.elm, oldVnode.children, newVnode.children);
+        } else {
+            // 老的没有children，新的有children
+            oldVnode.elm.innerHTML = "";
+            for (let i = 0; i < newVnode.children.length; i++) {
+                let dom = createElement(newVnode.children[i]);
+                oldVnode.elm.appendChild(dom);
+            }
+        }
+    }
+}
 ```
 
-<img :src="$withBase('/images/bestshi.com_2021-03-20_23-44-02.png')">
+**updateChildren：**
+
+```js
+import patchVnode from "./patchVnode.js";
+import createElement from "./createElement.js";
+
+// 判断是否是同一个虚拟节点
+function sameVnode(a, b) {
+    return a.sel == b.sel && a.key == b.key;
+}
+
+export default function updateChildren(parentElm, oldCh, newCh) {
+    // 旧前
+    let oldStartIdx = 0;
+    // 新前
+    let newStartIdx = 0;
+    // 旧后
+    let oldEndIdx = oldCh.length - 1;
+    // 新后
+    let newEndIdx = newCh.length - 1;
+    // 旧前节点
+    let oldStartVnode = oldCh[0];
+    // 新前节点
+    let newStartVnode = newCh[0];
+    // 旧后节点
+    let oldEndVnode = oldCh[oldEndIdx];
+    // 新后节点
+    let newEndVnode = newCh[newEndIdx];
+
+    let keyMap = null;
+
+    while (oldStartIdx <= oldEndIdx && newStartIdx <= newStartIdx) {
+        if (oldStartVnode == null || oldCh[oldStartIdx] == undefined) {
+            oldStartVnode = oldCh[++oldStartIdx];
+        } else if (oldEndVnode == null || oldCh[oldEndIdx] == undefined) {
+            oldEndVnode = oldCh[--oldEndIdx];
+        } else if (newStartVnode == null || newCh[newStartIdx] == undefined) {
+            newStartVnode = newCh[++newStartIdx];
+        } else if (newEndVnode == null || newCh[newEndIdx] == undefined) {
+            newEndVnode = newCh[--newEndIdx];
+        } else if (sameVnode(oldStartVnode, newStartVnode)) {
+            // 新前与旧前是同一个节点
+            patchVnode(oldStartVnode, newStartVnode);
+            // 移动指针
+            oldStartVnode = oldCh[++oldStartIdx];
+            newStartVnode = newCh[++newStartIdx];
+        } else if (sameVnode(oldEndVnode, newEndVnode)) {
+            // 新后与旧后是同一个节点
+            patchVnode(oldEndVnode, newEndVnode);
+            // 移动指针
+            oldEndVnode = oldCh[--oldEndIdx];
+            newEndVnode = newCh[--newEndIdx];
+        } else if (sameVnode(oldStartVnode, newEndVnode)) {
+            // 新后与旧前是同一个节点
+            patchVnode(oldStartVnode, newEndVnode);
+            // 移动到旧后之后
+            parentElm.insertBefore(
+                oldStartVnode.elm,
+                oldEndVnode.elm.nextSibling
+            );
+            // 移动指针
+            oldStartVnode = oldCh[++oldStartIdx];
+            newEndVnode = newCh[--newEndIdx];
+        } else if (sameVnode(oldEndVnode, newStartVnode)) {
+            // 新前与旧后是同一个节点
+            patchVnode(oldEndVnode, newStartVnode);
+            // 移动到旧前之前
+            parentElm.insertBefore(oldEndVnode.elm, oldStartVnode.elm);
+            // 移动指针
+            newStartVnode = newCh[++newStartIdx];
+            oldEndVnode = oldCh[--oldEndIdx];
+        } else {
+            // 四种都没命中
+
+            if (!keyMap) {
+                keyMap = {};
+                for (let i = oldStartIdx; i <= oldEndIdx; i++) {
+                    const key = oldCh[i].key;
+                    if (key != undefined) {
+                        keyMap[key] = i;
+                    }
+                }
+            }
+            const idxInOld = keyMap[newStartVnode.key];
+
+            if (idxInOld == undefined) {
+                parentElm.insertBefore(
+                    createElement(newStartVnode),
+                    oldStartVnode.elm
+                );
+            } else {
+                // 不是全新的项,需要移动
+                const elmToMove = oldCh[idxInOld];
+                patchVnode(elmToMove, newStartVnode);
+                // 把这项设置为undefined
+                oldCh[idxInOld] = undefined;
+                parentElm.insertBefore(elmToMove.elm, oldStartVnode.elm);
+            }
+            newStartVnode = newCh[++newStartIdx];
+        }
+    }
+
+    // 看有没有剩余
+    if (newStartIdx <= newEndIdx) {
+        for (let i = newStartIdx; i <= newEndIdx; i++) {
+            parentElm.insertBefore(createElement(newCh[i]), oldCh[oldStartIdx]);
+        }
+    } else if (oldStartIdx <= oldEndIdx) {
+        for (let i = oldStartIdx; i <= oldEndIdx; i++) {
+            if (oldCh[i]) {
+                parentElm.removeChild(oldCh[i].elm);
+            }
+        }
+    }
+}
+```
+
+**vnode：**
+
+```js
+// vnode就是把传入的5个参数组合成对象返回
+
+export default function vnode(sel, data, children, text, elm) {
+    const key = data.key;
+    return {
+        sel,
+        data,
+        children,
+        text,
+        elm,
+        key,
+    };
+}
+```

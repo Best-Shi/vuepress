@@ -3,18 +3,18 @@
  */
 
 export default function createElement(vnode) {
-    console.log("createElement", vnode);
+    // console.log("createElement", vnode);
     // 创建一个DOM节点
     let domNode = document.createElement(vnode.sel);
 
     // 判断是有子节点还是文本
     if (
-        vnode.text !== "" &&
-        (vnode.children === undefined || vnode.children.length === 0)
+        vnode.text != "" &&
+        (vnode.children == undefined || vnode.children.length == 0)
     ) {
         // 是文本
         domNode.innerText = vnode.text;
-    } else {
+    } else if (Array.isArray(vnode.children) && vnode.children.length > 0) {
         // 是节点
         for (let i = 0; i < vnode.children.length; i++) {
             // 当前的children

@@ -14,7 +14,7 @@ export default function h(sel, data, c) {
 
     // 检测参数c的类型
 
-    if (typeof c === "string" || typeof c === "number") {
+    if (typeof c == "string" || typeof c == "number") {
         // 说明是形态①
         return vnode(sel, data, undefined, c, undefined);
     } else if (Array.isArray(c)) {
@@ -23,12 +23,12 @@ export default function h(sel, data, c) {
         let children = [];
         for (let i = 0; i < c.length; i++) {
             // 检测c[i]
-            if (!(typeof c[i] === "object" && c[i].hasOwnProperty("sel")))
+            if (!(typeof c[i] == "object" && c[i].hasOwnProperty("sel")))
                 throw new Error("传入的数组参数中有项不是h函数");
             children.push(c[i]);
         }
         return vnode(sel, data, children, undefined, undefined);
-    } else if (typeof c === "object" && c.hasOwnProperty("sel")) {
+    } else if (typeof c == "object" && c.hasOwnProperty("sel")) {
         // 说明是形态③
         // 传入的c是唯一的children
         return vnode(sel, data, [c], undefined, undefined);

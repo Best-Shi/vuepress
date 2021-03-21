@@ -1,12 +1,19 @@
 import h from "./mySnabbdom/h.js";
 import patch from "./mySnabbdom/patch.js";
 
-let myVnode1 = h("h1", {}, "你好");
+let myVnode1 = h("ul", {}, [
+    h("li", { key: "A" }, "A"),
+    h("li", { key: "B" }, "B"),
+    h("li", { key: "C" }, "C"),
+]);
 
 let myVnode2 = h("ul", {}, [
-    h("li", {}, "你好"),
-    h("li", {}, "你好"),
-    h("li", {}, h("span", {}, "hello")),
+    h("li", { key: "F" }, "F"),
+    h("li", { key: "A" }, "A"),
+    h("li", { key: "B" }, "B"),
+    h("li", { key: "C" }, "C"),
+    h("li", { key: "D" }, "D"),
+    h("li", { key: "E" }, "E"),
 ]);
 
 // console.log(myVnode1);
