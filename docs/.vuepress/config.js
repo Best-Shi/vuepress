@@ -161,6 +161,12 @@ module.exports = config({
                             prefix: "diff/",
                             children: ["虚拟DOM与diff算法"],
                         },
+                        {
+                            title: "双向数据绑定",
+                            icon: "vue",
+                            prefix: "reactive/",
+                            children: ["双向数据绑定"],
+                        },
                     ],
                 },
             ],
