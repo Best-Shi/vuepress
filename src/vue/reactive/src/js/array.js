@@ -52,7 +52,7 @@ methodsNeedChange.forEach((methodName) => {
                 ob.observeArray(inserted);
             }
 
-            console.log(21324);
+            ob.dep.notify();
             return result;
         },
         false

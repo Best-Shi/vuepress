@@ -1,4 +1,5 @@
 import observe from "./observe.js";
+import Watcher from "./Watcher.js";
 
 let obj = {
     a: {
@@ -11,6 +12,11 @@ let obj = {
 };
 
 observe(obj);
-obj.e.splice(2, 1, [88, 99]);
+// console.log(Watcher);
+new Watcher(obj, "a.b.c", (val) => {
+    console.log("111111", val);
+});
 
-console.log(obj.e);
+obj.a.b.c = 20;
+
+console.log(obj);

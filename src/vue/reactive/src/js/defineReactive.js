@@ -8,8 +8,10 @@
  */
 
 import observe from "./observe.js";
+import Dep from "./Dep.js";
 
 export default function defineReactive(data, key, val) {
+    const dep = new Dep();
     if (arguments.length == 2) {
         val = data[key];
     }
@@ -21,16 +23,24 @@ export default function defineReactive(data, key, val) {
         enumerable: true,
         configurable: true,
         get() {
-            console.log(`你试图访问${data}对象，${key}属性`);
+            // 如果处于依赖收集阶段
+            if (Dep.target) {
+                dep.depend();
+                if (childOb) {
+                    childOb.dep.depend();
+                }
+            }
             return val;
         },
         set(value) {
-            console.log(`你试图更改${data}对象，${key}属性`);
             if (val === value) {
                 return;
             }
             val = value;
             childOb = observe(value);
+
+            // 发布订阅模式，通知dep
+            dep.notify();
         },
     });
 }
