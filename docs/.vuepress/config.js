@@ -167,6 +167,12 @@ module.exports = config({
                             prefix: "reactive/",
                             children: ["双向数据绑定"],
                         },
+                        {
+                            title: "抽象语法树",
+                            icon: "vue",
+                            prefix: "ast/",
+                            children: ["抽象语法树"],
+                        },
                     ],
                 },
             ],
