@@ -88,7 +88,7 @@ module.exports = config({
                     title: "Best Shi 的随笔",
                     icon: "note",
                     collapsable: false,
-                    children: [""],
+                    children: ["", "Windows相关"],
                 },
             ],
             "/web/css": [
