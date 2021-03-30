@@ -46,6 +46,7 @@ module.exports = config({
         // markdown增强
         mdEnhance: {
             enableAll: true,
+            flowchart: true,
         },
 
         nav: [

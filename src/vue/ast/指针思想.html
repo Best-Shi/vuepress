@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>指针思想</title>
+    </head>
+
+    <body>
+        <script>
+            // 寻找连续重复次数最多的字符
+            let str = "aaaabbbbbcccccccccccccdddddd";
+
+            let i = 0;
+            let j = 1;
+            // 当前重复最多的次数
+            let maxRepeatCount = 0;
+            // 重复最对的字符串
+            let maxRepeatChar = "";
+
+            while (i <= str.length - 1) {
+                // 看i和j指向的字符是否相同
+                if (str[i] !== str[j]) {
+                    if (j - i > maxRepeatCount) {
+                        maxRepeatCount = j - i;
+                        maxRepeatChar = str[i];
+                    }
+                    i = j;
+                }
+                j++;
+            }
+
+            console.log(`${maxRepeatChar}, 重复了${maxRepeatCount}次`);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+
+    <body>
+        <script>
+            // 数组转换成对象
+
+            let arr = [1, 2, 3, [4, 5], 6, 7];
+
+            function convert(item) {
+                if (typeof item === "number") {
+                    return {
+                        value: item,
+                    };
+                } else if (Array.isArray(item)) {
+                    return {
+                        children: item.map((val) => convert(val)),
+                    };
+                }
+            }
+
+            console.log(convert(arr));
+        </script>
+    </body>
+</html>

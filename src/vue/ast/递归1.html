@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+
+    <body>
+        <script>
+            // 斐波那契数列
+
+            let cache = {};
+            function fib(num) {
+                console.count("调用");
+                if (cache.hasOwnProperty(num)) {
+                    return cache[num];
+                }
+                let val =
+                    num === 0 || num === 1 ? 1 : fib(num - 1) + fib(num - 2);
+                cache[num] = val;
+                return val;
+            }
+            console.log(fib(10));
+        </script>
+    </body>
+</html>
