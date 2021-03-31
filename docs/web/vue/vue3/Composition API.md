@@ -148,6 +148,10 @@ export default defineComponent({
     -   对象: 通过 defineProperty 对对象的已有属性值的读取和修改进行劫持(监视/拦截)
     -   数组: 通过重写数组更新数组一系列更新元素的方法来实现元素修改的劫持
 
+::: tip
+[vue2 数据响应式原理](http://bestshi.gitee.io/blog/web/vue/reactive/%E5%8F%8C%E5%90%91%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A/)
+:::
+
 -   问题
     -   对象直接新添加的属性或删除已有属性, 界面不会自动更新
     -   直接通过下标替换元素或更新 length, 界面不会自动更新 arr[1] = {}
@@ -160,3 +164,48 @@ export default defineComponent({
     -   文档:
         -   https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
         -   https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect
+
+```js
+// 目标对象
+let user = {
+    name: "小憨憨",
+    age: 19,
+    wife: {
+        name: "你猜",
+        age: 20,
+    },
+};
+
+// 把目标对象变成代理对象
+let proxyUser = new Proxy(user, {
+    // 获取目标对象上的属性
+    get(target, prop) {
+        console.log("get方法调用了");
+        return Reflect.get(target, prop);
+    },
+    // 修改或添加目标对象上的属性
+    set(target, prop, val) {
+        console.log("set方法调用了");
+        return Reflect.set(target, prop, val);
+    },
+    // 删除某个目标对象的属性
+    defineProperty(target, prop) {
+        console.log("delete方法被调用了");
+        return Reflect.defineProperty(target, prop);
+    },
+});
+
+// 通过代理对象获取目标对象中的某个属性值
+console.log(proxyUser.name);
+
+proxyUser.name = "陆憨憨";
+console.log(user);
+
+proxyUser.gender = "男";
+console.log(user);
+
+delete proxyUser.age;
+console.log(user);
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-01_01-36-43.jpg')">
