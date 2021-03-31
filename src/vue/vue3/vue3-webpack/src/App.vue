@@ -1,27 +1,39 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <h2>setup与ref使用</h2>
+    <h3>{{ count }}</h3>
+    <button @click="update">更新数据</button>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    name: "App",
+
+    // vue2方式实现点击按钮更新数据
+    // data() {
+    //     return {
+    //         count: 1,
+    //     };
+    // },
+    // methods: {
+    //     update() {
+    //         this.count++;
+    //     },
+    // },
+
+    // vue3实现点击按钮更新数据
+    setup() {
+        let count = ref(1);
+
+        function update() {
+            count.value++;
+        }
+
+        return {
+            count,
+            update,
+        };
+    },
 });
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

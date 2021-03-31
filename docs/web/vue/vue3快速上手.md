@@ -102,3 +102,79 @@ npm run dev
 ```
 
 <img :src="$withBase('/images/bestshi.com_2021-03-31_23-22-18.jpg')">
+
+## Composition API(常用部分)
+
+[文档地址](https://composition-api.vuejs.org/zh/api.html)
+
+### 1、setup
+
+-   新的 option, 所有的组合 API 函数都在此使用, 只在初始化时执行一次
+-   函数如果返回对象, 对象中的属性或方法, 模板中可以直接使用
+
+### 2、ref
+
+-   作用: 定义一个数据的响应式
+-   语法: const xxx = ref(initValue):
+    -   创建一个包含响应式数据的引用(reference)对象
+    -   js 中操作数据: xxx.value
+    -   模板中操作数据: 不需要.value
+-   一般用来定义一个基本类型的响应式数据
+
+**vue3 实现点击按钮更新数据：**
+
+```vue
+<template>
+    <h2>setup与ref使用</h2>
+    <h3>{{ count }}</h3>
+    <button @click="update">更新数据</button>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+
+export default defineComponent({
+    name: "App",
+    setup() {
+        let count = ref(1);
+
+        function update() {
+            count.value++;
+        }
+
+        return {
+            count,
+            update,
+        };
+    },
+});
+</script>
+```
+
+**vue2 实现点击按钮更新数据：**
+
+```vue
+<template>
+    <h2>setup与ref使用</h2>
+    <h3>{{ count }}</h3>
+    <button @click="update">更新数据</button>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    name: "App",
+    data() {
+        return {
+            count: 1,
+        };
+    },
+    methods: {
+        update() {
+            this.count++;
+        },
+    },
+});
+</script>
+```
