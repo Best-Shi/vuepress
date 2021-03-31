@@ -138,7 +138,7 @@ module.exports = config({
                     icon: "vue",
                     collapsable: false,
                     prefix: "vue/",
-                    children: [""],
+                    children: ["", "vue3快速上手"],
                 },
                 {
                     title: "Vue 源码解析",
