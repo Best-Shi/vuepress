@@ -7,6 +7,8 @@ tag:
     - 前端
     - 案例
 category: TypeScript
+prev: /web/ts/TypeScript面向对象笔记
+next: false
 ---
 
 # TypeScript 案例

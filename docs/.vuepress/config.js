@@ -169,12 +169,14 @@ module.exports = config({
                         {
                             title: "mustache模板引擎",
                             icon: "vue",
-                            prefix: "mustache/",
-                            children: [
-                                "数据变为视图方式",
-                                "mustache基本使用",
-                                "手写mustache模板引擎",
-                            ],
+                            collapsable: false,
+                            path: "mustache/mustache模板引擎",
+                            // children: [
+                            //     "mustache模板引擎",
+                            //     "数据变为视图方式",
+                            //     "mustache基本使用",
+                            //     "手写mustache模板引擎",
+                            // ],
                         },
                         {
                             title: "虚拟DOM与diff算法",

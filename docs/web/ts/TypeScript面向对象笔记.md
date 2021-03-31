@@ -6,6 +6,8 @@ tag:
     - TypeScript
     - 前端
 category: TypeScript
+prev: /web/ts/TypeScript类型与配置笔记
+next: /web/ts/TypeScript案例
 ---
 
 # TypeScript 面向对象笔记

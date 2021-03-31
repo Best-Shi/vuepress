@@ -6,6 +6,8 @@ tag:
     - TypeScript
     - 前端
 category: TypeScript
+prev: /web/ts/
+next: /web/ts/TypeScript类型与配置笔记
 ---
 
 # TypeScript 类型与配置笔记

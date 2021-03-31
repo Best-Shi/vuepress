@@ -10,6 +10,8 @@ tag:
     - diff
     - 虚拟DOM
 category: vue
+prev: /web/vue/mustache/mustache模板引擎
+next: /web/vue/reactive/双向数据绑定
 ---
 
 # 虚拟 DOM 与 diff 算法

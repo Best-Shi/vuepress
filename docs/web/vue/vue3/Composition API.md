@@ -8,6 +8,8 @@ tag:
     - 前端
     - JavaScript
 category: vue
+prev: /web/vue/vue3/vue3快速上手
+next: /web/vue/vue3/Composition API
 ---
 
 # Composition API
