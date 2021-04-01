@@ -1,0 +1,22 @@
+[
+    {
+        "bookName": "Node,js",
+        "price": "99.88",
+        "category": "后端"
+    },
+    {
+        "bookName": "Vue",
+        "price": "33.88",
+        "category": "前端"
+    },
+    {
+        "bookName": "React",
+        "price": "23.88",
+        "category": "前端"
+    },
+    {
+        "bookName": "HTML",
+        "price": "53.88",
+        "category": "前端"
+    }
+]

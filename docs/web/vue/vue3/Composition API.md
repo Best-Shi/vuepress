@@ -729,3 +729,177 @@ export default defineComponent({
 <img :src="$withBase('/images/bestshi.com_2021-04-01_23-31-06.jpg')">
 
 :::
+
+### 9、自定义 hook 函数
+
+-   使用 Vue3 的组合 API 封装的可复用的功能函数
+-   自定义 hook 的作用类似于 vue2 中的 mixin 技术
+-   自定义 Hook 的优势: 很清楚复用功能代码的来源, 更清楚易懂
+
+**需求 1: 收集用户鼠标点击的页面坐标**
+
+::: details 示例代码
+
+./hooks/useMousePosition.ts
+
+```ts
+import { onBeforeUnmount, onMounted, ref } from "vue";
+
+export default function() {
+    const x = ref(0);
+    const y = ref(0);
+    const handlerClick = (e: MouseEvent) => {
+        x.value = e.pageX;
+        y.value = e.pageY;
+    };
+    onMounted(() => {
+        window.addEventListener("click", handlerClick);
+    });
+    onBeforeUnmount(() => {
+        window.removeEventListener("click", handlerClick);
+    });
+    return {
+        x,
+        y,
+    };
+}
+```
+
+App.vue
+
+```vue
+<template>
+    <h1>自定义hook函数</h1>
+    <h3>X坐标：{{ x }}</h3>
+    <h3>Y坐标：{{ y }}</h3>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
+import useMousePosition from "./hooks/useMousePosition";
+
+export default defineComponent({
+    name: "App",
+    setup() {
+        const { x, y } = useMousePosition();
+        return {
+            x,
+            y,
+        };
+    },
+});
+</script>
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-02_00-56-09.jpg')">
+
+:::
+
+**需求 2: 封装发 ajax 请求的 hook 函数, 利用 TS 泛型强化类型检查**
+
+::: details 示例代码
+
+./hooks/useRequest.ts
+
+```ts
+import { ref } from "vue";
+import axios from "axios";
+
+export default function useRequest<T>(url: string) {
+    const loading = ref(true);
+    const result = ref<T | null>(null);
+    const errMsg = ref(null);
+
+    axios
+        .get(url)
+        .then((res) => {
+            setTimeout(() => {
+                loading.value = false;
+                result.value = res.data;
+            }, 2000);
+        })
+        .catch((err) => {
+            loading.value = false;
+            errMsg.value = err.message || "未知错误";
+        });
+
+    return {
+        loading,
+        result,
+        errMsg,
+    };
+}
+```
+
+App.vue
+
+```vue
+<template>
+    <h3>作者信息</h3>
+    <h4 v-if="loading1">LOADING......</h4>
+    <div v-else>
+        <p>姓名：{{ result1.name }}</p>
+        <p>性别：{{ result1.gender }}</p>
+        <p>年龄：{{ result1.age }}</p>
+    </div>
+    <hr />
+    <h3>书本名称</h3>
+    <h4 v-if="loading2">LOADING......</h4>
+    <div v-else>
+        <ul v-for="(item, index) in result2" :key="index">
+            <li>书名：{{ item.name }}</li>
+            <li>价格：{{ item.price }}</li>
+            <li>分类：{{ item.category }}</li>
+        </ul>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, watch } from "vue";
+import useMousePosition from "./hooks/useMousePosition";
+import useRequest from "./hooks/useRequest";
+
+interface User {
+    name: string;
+    age: number;
+    gender: string;
+}
+
+interface Book {
+    name: string;
+    price: number;
+    ctaegory: string;
+}
+
+export default defineComponent({
+    name: "App",
+    setup() {
+        const { x, y } = useMousePosition();
+        const { loading: loading1, result: result1 } = useRequest<User>(
+            "/data/user.json"
+        );
+        const { loading: loading2, result: result2 } = useRequest<Book[]>(
+            "/data/books.json"
+        );
+
+        watch(result2, () => {
+            if (result2.value) {
+                console.log(result2.value.length);
+            }
+        });
+
+        return {
+            x,
+            y,
+            result1,
+            loading1,
+            result2,
+            loading2,
+        };
+    },
+});
+</script>
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-02_00-54-36.jpg')">
+:::
