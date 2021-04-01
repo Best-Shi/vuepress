@@ -12,7 +12,7 @@ prev: /web/vue/vue3/vue3快速上手
 next: /web/vue/vue3/Composition API
 ---
 
-# Composition API
+# Composition API(常用部分)
 
 ## Composition API(常用部分)
 
@@ -384,3 +384,61 @@ export default defineComponent({
 
 -   一般不要混合使用: methods 中可以访问 setup 提供的属性和方法, 但在 setup 方法中不能访问 data 和 methods
 -   setup 不能是一个 async 函数: 因为返回值不再是 return 的对象, 而是 promise, 模板看不到 return 对象中的属性数据
+
+### 6、reactive 与 ref 细节
+
+-   是 Vue3 的 composition API 中 2 个最重要的响应式 API
+-   ref 用来处理基本类型数据, reactive 用来处理对象(递归深度响应式)
+-   ref 内部: 通过给 value 属性添加 getter/setter 来实现对数据的劫持
+-   如果用 ref 对象/数组, 内部会自动将对象/数组转换为 reactive 的代理对象
+-   reactive 内部: 通过使用 Proxy 来实现对对象内部所有数据的劫持, 并通过 Reflect 操作对象内部数据
+-   ref 的数据操作: 在 js 中要.value, 在模板中不需要(内部解析模板时会自动添加.value)
+
+```vue
+<template>
+    <h1>reactive与ref细节</h1>
+    <h3>ref基本数据类型：{{ m1 }}</h3>
+    <h3>ref引用数据类型：{{ m2.name }}</h3>
+    <h3>reactive引用数据类型：{{ m4.name }}</h3>
+    <button @click="update">更新数据</button>
+</template>
+
+<script lang="ts">
+import { defineComponent, reactive, ref } from "vue";
+
+export default defineComponent({
+    name: "App",
+    setup() {
+        let m1 = ref("Hello World");
+        let m2 = ref({
+            name: "小明",
+            wife: {
+                name: "小红",
+            },
+        });
+        let m4 = reactive({
+            name: "小白",
+            wife: {
+                name: "小米",
+            },
+        });
+        function update() {
+            console.log(m1);
+            console.log(m2);
+            console.log(m4);
+            m1.value += "==";
+            m2.value.name += "==";
+            m4.name += "++";
+        }
+        return {
+            m1,
+            m2,
+            m4,
+            update,
+        };
+    },
+});
+</script>
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-01_17-33-16.jpg')">

@@ -147,13 +147,13 @@ module.exports = config({
                     prefix: "vue/",
                     children: [
                         {
-                            title: "认识 Vue3",
+                            title: "Vue3 快速上手",
                             icon: "vue",
                             collapsable: false,
                             path: "vue3/vue3快速上手",
                         },
                         {
-                            title: "Composition API",
+                            title: "Composition API(常用部分)",
                             icon: "vue",
                             collapsable: false,
                             path: "vue3/Composition API",
