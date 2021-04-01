@@ -97,6 +97,8 @@ export default defineComponent({
 -   响应式转换是“深层的”：会影响对象内部所有嵌套的属性
 -   内部基于 ES6 的 Proxy 实现，通过代理对象操作源对象内部数据都是响应式的
 
+::: details 示例代码
+
 ```vue
 <template>
     <h2>reactive基本使用</h2>
@@ -139,6 +141,8 @@ export default defineComponent({
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_00-04-00.jpg')">
 
+:::
+
 ### 4、Vue2 与 Vue3 的响应式比较
 
 #### vue2 的响应式
@@ -164,6 +168,8 @@ export default defineComponent({
     -   文档:
         -   https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
         -   https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect
+
+::: details 示例代码
 
 ```js
 // 目标对象
@@ -210,6 +216,8 @@ console.log(user);
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_01-36-43.jpg')">
 
+:::
+
 ### 5、setup 细节
 
 #### setup 执行的时机
@@ -217,6 +225,8 @@ console.log(user);
 -   在 beforeCreate 之前执行(一次), 此时组件对象还没有创建
 -   this 是 undefined, 不能通过 this 来访问 data/computed/methods/props
 -   其实所有的 composition API 相关回调函数中也都不可以
+
+::: details 示例代码
 
 ```vue
 // App.vue
@@ -274,12 +284,16 @@ export default defineComponent({
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_15-56-45.jpg')">
 
+:::
+
 #### setup 的返回值
 
 -   一般都返回一个对象: 为模板提供数据, 也就是模板中可以直接使用此对象中的所有属性/方法
 -   返回对象中的属性会与 data 函数返回对象的属性合并成为组件对象的属性
 -   返回对象中的方法会与 methods 中的方法合并成功组件对象的方法
 -   如果有重名 setup 优先
+
+::: details 示例代码
 
 ```vue
 <template>
@@ -312,6 +326,8 @@ export default defineComponent({
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_16-08-18.jpg')">
 
+:::
+
 #### setup 的参数
 
 -   setup(props, context) / setup(props, {attrs, slots, emit})
@@ -319,6 +335,8 @@ export default defineComponent({
 -   attrs: 包含没有在 props 配置中声明的属性的对象, 相当于 this.\$attrs
 -   slots: 包含所有传入的插槽内容的对象, 相当于 this.\$slots
 -   emit: 用来分发自定义事件的函数, 相当于 this.\$emit
+
+::: details 示例代码
 
 ```vue
 // App.vue
@@ -380,6 +398,8 @@ export default defineComponent({
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_16-22-16.jpg')">
 
+:::
+
 #### **注意:**
 
 -   一般不要混合使用: methods 中可以访问 setup 提供的属性和方法, 但在 setup 方法中不能访问 data 和 methods
@@ -393,6 +413,8 @@ export default defineComponent({
 -   如果用 ref 对象/数组, 内部会自动将对象/数组转换为 reactive 的代理对象
 -   reactive 内部: 通过使用 Proxy 来实现对对象内部所有数据的劫持, 并通过 Reflect 操作对象内部数据
 -   ref 的数据操作: 在 js 中要.value, 在模板中不需要(内部解析模板时会自动添加.value)
+
+::: details 示例代码
 
 ```vue
 <template>
@@ -443,6 +465,8 @@ export default defineComponent({
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_17-33-16.jpg')">
 
+:::
+
 ### 7、计算属性与监视
 
 -   computed 函数:
@@ -462,6 +486,8 @@ export default defineComponent({
     -   不用直接指定要监视的数据, 回调函数中使用的哪些响应式数据就监视哪些响应式数据
     -   默认初始时就会执行第一次, 从而可以收集需要监视的数据
     -   监视数据发生变化时回调
+
+::: details 示例代码
 
 ```vue
 <template>
@@ -569,3 +595,137 @@ export default defineComponent({
 ```
 
 <img :src="$withBase('/images/bestshi.com_2021-04-01_19-15-00.jpg')">
+
+:::
+
+### 8、生命周期
+
+**Vue3.x 中的生命周期执行优先于 Vue2.x 中的生命周期。**
+
+#### **vue2.x 生命周期**
+
+<img :src="$withBase('/images/lifecycle_2.x.png')">
+
+#### **vue3.x 生命周期**
+
+<img :src="$withBase('/images/lifecycle_3.x.svg')">
+
+#### **与 2.x 版本生命周期相对应的组合式 API**
+
+| Vue2.x        | Vue3.x            | 说明             |
+| ------------- | ----------------- | ---------------- |
+| beforeCreate  | setup()           | 数据加载前       |
+| created       | setup()           | 数据加载后       |
+| beforeMount   | onBeforeMount()   | 页面挂载前       |
+| mounted       | onMounted()       | 页面挂载后       |
+| beforeUpdate  | onBeforeUpdate()  | 数据更新前       |
+| updated       | onUpdated()       | 数据更新后       |
+| beforeDestroy | onBeforeUnmount() | 页面卸载前       |
+| destroyed     | onUnmounted()     | 页面卸载后       |
+| errorCaptured | onErrorCaptured() | 子组件错误捕获时 |
+
+#### **新增的钩子函数**
+
+-   组合式 API 还提供了以下调试钩子函数：
+    -   onRenderTracked：跟踪虚拟 DOM 重新渲染时调用。
+    -   onRenderTriggered：当虚拟 DOM 重新渲染被触发时调用。
+
+::: details 示例代码
+
+```vue
+// App.vue<template>
+    <h1>生命周期</h1>
+    <h3>App</h3>
+    <button @click="isShow = !isShow">显示隐藏</button>
+    <hr />
+    <Child v-if="isShow" />
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+import Child from "./components/Child.vue";
+
+export default defineComponent({
+    name: "App",
+    components: { Child },
+    setup() {
+        let isShow = ref(true);
+        return {
+            isShow,
+        };
+    },
+});
+</script>
+
+// Child.vue
+<template>
+    <h3>Child</h3>
+    <button @click="update">更新数据</button>
+    <h3>msg: {{ msg }}</h3>
+</template>
+
+<script lang="ts">
+import {
+    defineComponent,
+    onBeforeMount,
+    onBeforeUnmount,
+    onBeforeUpdate,
+    onMounted,
+    onUnmounted,
+    onUpdated,
+    ref,
+} from "vue";
+
+export default defineComponent({
+    name: "Child",
+    // Vue2.x中的生命周期
+    beforeCreate() {
+        console.log("Vue2.x中的 beforeCreate ...");
+    },
+    created() {
+        console.log("Vue2.x中的 created ...");
+    },
+    beforeMount() {
+        console.log("Vue2.x中的 beforeMount ...");
+    },
+    mounted() {
+        console.log("Vue2.x中的 mounted ...");
+    },
+    beforeUpdate() {
+        console.log("Vue2.x中的 beforeUpdate ...");
+    },
+    updated() {
+        console.log("Vue2.x中的 updated ...");
+    },
+    beforeUnmount() {
+        console.log("Vue2.x中的 beforeUnmount ...");
+    },
+    unmounted() {
+        console.log("Vue2.x中的 unmounted ...");
+    },
+    setup() {
+        // Vue3.x中的生命周期
+        console.log("Vue3.x中的 setup ...");
+        onBeforeMount(() => console.log("Vue3.x中的 onBeforeMount ..."));
+        onMounted(() => console.log("Vue3.x中的 onMounted ..."));
+        onBeforeUpdate(() => console.log("Vue3.x中的 onBeforeUpdate ..."));
+        onUpdated(() => console.log("Vue3.x中的 onUpdated ..."));
+        onBeforeUnmount(() => console.log("Vue3.x中的 onBeforeUnmount ..."));
+        onUnmounted(() => console.log("Vue3.x中的 onUnmounted ..."));
+
+        let msg = ref("数据更新了");
+        function update() {
+            msg.value += "+++";
+        }
+        return {
+            msg,
+            update,
+        };
+    },
+});
+</script>
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-01_23-31-06.jpg')">
+
+:::
