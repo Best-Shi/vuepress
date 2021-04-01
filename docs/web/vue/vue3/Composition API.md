@@ -18,6 +18,8 @@ next: /web/vue/vue3/Composition API
 
 [文档地址](https://composition-api.vuejs.org/zh/api.html)
 
+[案例代码地址](https://gitee.com/bestshi/blog/tree/master/src/vue/vue3/vue3-webpack)
+
 ### 1、setup
 
 -   新的 option, 所有的组合 API 函数都在此使用, 只在初始化时执行一次
@@ -966,3 +968,35 @@ function useReatureX() {
 ```
 
 :::
+
+### 11、ref 获取元素
+
+-   利用 ref 函数获取组件中的标签元素
+-   功能需求: 让输入框自动获取焦点
+
+```vue
+<template>
+    <h1>ref 获取元素</h1>
+    <input type="text" />
+    <hr />
+    <input type="text" ref="inputRef" />
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
+
+export default defineComponent({
+    name: "App",
+    setup() {
+        const inputRef = ref<HTMLElement | null>(null);
+
+        onMounted(() => {
+            inputRef.value && inputRef.value.focus();
+        });
+        return {
+            inputRef,
+        };
+    },
+});
+</script>
+```
