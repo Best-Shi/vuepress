@@ -9,7 +9,7 @@ tag:
     - JavaScript
 category: vue
 prev: /web/vue/
-next: /web/vue/vue3/Composition API
+next: /web/vue/vue3/Composition API(常用部分)
 ---
 
 # 认识 Vue3
