@@ -200,3 +200,101 @@ export default defineComponent({
 ```
 
 :::
+
+### provide 与 inject
+
+-   实现跨层级组件(祖孙)间通信
+
+::: details 示例代码
+
+```vue
+// App.vue
+<template>
+    <h1>provide 与 inject</h1>
+    <div>
+        <h3>父级组件</h3>
+        <input type="text" v-model="keyword" />
+        <hr />
+        <p>:{{ keyword }}</p>
+        <Son></Son>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, provide, ref } from "vue";
+import Son from "./components/Son.vue";
+
+export default defineComponent({
+    name: "App",
+    components: {
+        Son,
+    },
+    setup() {
+        const keyword = ref();
+        provide("keyword", keyword);
+        return {
+            keyword,
+        };
+    },
+});
+</script>
+
+<style>
+div {
+    border: 1px solid #008c8c;
+    padding: 20px;
+}
+</style>
+```
+
+```vue
+// ./components/Son.vue
+<template>
+    <div>
+        <h3>子级组件</h3>
+        <hr />
+        <Grandson></Grandson>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import Grandson from "./Grandson.vue";
+
+export default defineComponent({
+    name: "Son",
+    components: {
+        Grandson,
+    },
+    setup() {
+        return {};
+    },
+});
+</script>
+```
+
+```vue
+// ./components/Grandson.vue
+<template>
+    <div>
+        <h3>子孙级组件</h3>
+        <p>:{{ keyword }}</p>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, inject } from "vue";
+
+export default defineComponent({
+    name: "Grandson",
+    setup() {
+        const keyword = inject("keyword");
+        return {
+            keyword,
+        };
+    },
+});
+</script>
+```
+
+:::
