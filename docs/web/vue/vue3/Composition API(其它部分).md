@@ -16,7 +16,7 @@ next: /web/vue/vue3/手写组合API
 
 ## Composition API(其它部分)
 
-### 1、shallowReactive 与 shallowRef
+### 2、1、shallowReactive 与 shallowRef
 
 -   shallowReactive : 只处理了对象内最外层属性的响应式(也就是浅响应式)
 
@@ -120,7 +120,7 @@ export default defineComponent({
 
 <img :src="$withBase('/images/bestshi.com_2021-04-07_14-46-55.jpg')">
 
-### Readonly 与 shallowReadonly
+### 2、Readonly 与 shallowReadonly
 
 -   readonly:
     -   深度只读数据
@@ -132,7 +132,7 @@ export default defineComponent({
 -   应用场景:
     -   在某些特定情况下, 我们可能不希望对数据进行更新的操作, 那就可以包装生成一个只读代理对象来读取数据, 而不能修改或删除
 
-### toRaw 与 markRaw
+### 3、toRaw 与 markRaw
 
 -   toRaw
     -   返回由 reactive 或 readonly 方法转换成响应式代理的普通对象。
@@ -143,13 +143,13 @@ export default defineComponent({
     -   有些值不应被设置为响应式的，例如复杂的第三方类实例或 Vue 组件对象。
     -   当渲染具有不可变数据源的大列表时，跳过代理转换可以提高性能。
 
-### toRef
+### 4、toRef
 
 -   为源响应式对象上的某个属性创建一个 ref 对象, 二者内部操作的是同一个数据值, 更新时二者是同步的
 -   区别 ref: 拷贝了一份新的数据值单独操作, 更新时相互不影响
 -   应用: 当要将 某个 prop 的 ref 传递给复合函数时，toRef 很有用
 
-### customRef
+### 5、customRef
 
 -   创建一个自定义的 ref，并对其依赖项跟踪和更新触发进行显式控制
 -   需求: 使用 customRef 实现 debounce 的示例
@@ -201,7 +201,7 @@ export default defineComponent({
 
 :::
 
-### provide 与 inject
+### 6、provide 与 inject
 
 -   实现跨层级组件(祖孙)间通信
 
@@ -298,3 +298,10 @@ export default defineComponent({
 ```
 
 :::
+
+### 7、响应式数据的判断
+
+-   isRef: 检查一个值是否为一个 ref 对象
+-   isReactive: 检查一个对象是否是由 reactive 创建的响应式代理
+-   isReadonly: 检查一个对象是否是由 readonly 创建的只读代理
+-   isProxy: 检查一个对象是否是由 reactive 或者 readonly 方法创建的代理
