@@ -164,6 +164,12 @@ module.exports = config({
                             collapsable: false,
                             path: "vue3/Composition API(其它部分)",
                         },
+                        {
+                            title: "手写组合 API",
+                            icon: "vue",
+                            collapsable: false,
+                            path: "vue3/手写组合 API",
+                        },
                     ],
                 },
                 {
