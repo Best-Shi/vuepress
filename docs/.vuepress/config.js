@@ -165,10 +165,10 @@ module.exports = config({
                             path: "vue3/Composition API(其它部分)",
                         },
                         {
-                            title: "手写组合 API",
+                            title: "Vue3 新组件",
                             icon: "vue",
                             collapsable: false,
-                            path: "vue3/手写组合 API",
+                            path: "vue3/Vue3 新组件",
                         },
                     ],
                 },
