@@ -73,7 +73,22 @@ module.exports = config({
                     { text: "Deno", link: "deno/", icon: "deno" },
                 ],
             },
-            { text: "工具", link: "/tools/", icon: "engine" },
+            {
+                text: "工具",
+                icon: "engine",
+                items: [
+                    {
+                        text: "打包构建工具",
+                        prefix: "/tools/",
+                        items: [
+                            {
+                                text: "Grunt",
+                                link: "grunt/",
+                            },
+                        ],
+                    },
+                ],
+            },
             { text: "软件配置", link: "/programs/", icon: "software" },
             { text: "关于", link: "/about/", icon: "info" },
         ],
