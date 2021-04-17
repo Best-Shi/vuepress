@@ -85,6 +85,10 @@ module.exports = config({
                                 text: "Grunt",
                                 link: "grunt/",
                             },
+                            {
+                                text: "Gulp",
+                                link: "gulp/",
+                            },
                         ],
                     },
                 ],
