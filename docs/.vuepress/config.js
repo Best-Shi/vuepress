@@ -251,6 +251,26 @@ module.exports = config({
                     children: [""],
                 },
             ],
+            "/tools/": [
+                {
+                    title: "打包构建工具",
+                    collapsable: false,
+                    icon: "engine",
+                    // prefix: "grunt/",
+                    children: [
+                        {
+                            title: "Grunt",
+                            collapsable: false,
+                            path: "grunt/",
+                        },
+                        {
+                            title: "Gulp",
+                            collapsable: false,
+                            path: "gulp/",
+                        },
+                    ],
+                },
+            ],
         },
     },
 });
