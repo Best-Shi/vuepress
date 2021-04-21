@@ -66,11 +66,21 @@ module.exports = config({
             },
             {
                 text: "后端",
-                prefix: "/service/",
                 icon: "back-stage",
                 items: [
-                    { text: "Node", link: "node/", icon: "node-js" },
-                    { text: "Deno", link: "deno/", icon: "deno" },
+                    {
+                        text: "开发语言",
+                        prefix: "/service/",
+                        items: [
+                            { text: "Node", link: "node/", icon: "node-js" },
+                            { text: "Deno", link: "deno/", icon: "deno" },
+                        ],
+                    },
+                    {
+                        text: "数据库",
+                        prefix: "/service/",
+                        items: [{ text: "MongoDB", link: "mongodb/" }],
+                    },
                 ],
             },
             {
@@ -248,6 +258,14 @@ module.exports = config({
                     icon: "deno",
                     collapsable: false,
                     prefix: "deno/",
+                    children: [""],
+                },
+            ],
+            "/service/mongodb": [
+                {
+                    title: "MongoDB 相关",
+                    collapsable: false,
+                    prefix: "mongodb/",
                     children: [""],
                 },
             ],
