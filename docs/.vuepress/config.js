@@ -266,7 +266,7 @@ module.exports = config({
                     title: "MongoDB 相关",
                     collapsable: false,
                     prefix: "mongodb/",
-                    children: [""],
+                    children: ["", "MongoDB进阶"],
                 },
             ],
             "/tools/": [
