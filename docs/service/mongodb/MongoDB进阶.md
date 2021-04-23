@@ -8,7 +8,7 @@ tag:
     - 服务器
 category: 数据库
 prev: /service/mongodb/
-next: false
+next: /service/mongodb/MongoDB权限配置
 ---
 
 # MongoDB 进阶
