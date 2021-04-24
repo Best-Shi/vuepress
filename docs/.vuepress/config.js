@@ -144,7 +144,7 @@ module.exports = config({
                     icon: "js",
                     collapsable: false,
                     prefix: "js/",
-                    children: [""],
+                    children: ["", "JavaScript数组"],
                 },
             ],
             "/web/ts": [
