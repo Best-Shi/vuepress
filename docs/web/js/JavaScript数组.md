@@ -218,3 +218,303 @@ console.log(arr1.copyWithin(0, 5, 9)); // [5, 5, 6, 9, 4, 5, 5, 6, 9, 22, 32, 33
 console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
 console.log(arr1.copyWithin(-2, -8, -4)); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22]
 ```
+
+## 数组访问方法
+
+> 这些方法绝对不会改变调用它们的对象的值，只会返回一个新的数组或者返回一个其它的期望值。
+
+### 1、slice
+
+> 抽取当前数组中的一段元素组合成一个新数组（包含开始位，不包含结束位）。
+
+**语法：**
+
+```js
+arr.slice([begin[, end]])
+```
+
+**参数说明：**
+
+-   begin：起始索引（从 0 开始）。
+    -   如果省略 begin，则从 0 开始。
+    -   如果 begin 超出原数组的索引范围，则会返回空数组。
+    -   如果该参数为负数，则表示从原数组中的倒数第几个元素开始提取
+-   end：结束索引。
+    -   如果 end 被省略，则 slice 会一直提取到原数组末尾。
+    -   如果 end 大于数组的长度，slice 也会一直提取到原数组末尾。
+    -   如果该参数为负数，则表示从原数组中的倒数第几个元素结束提取
+
+**示例：**
+
+```js
+console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
+console.log(arr1.slice(3, 10)); // [444, 4, 5, 5, 6, 9, 22]
+console.log(arr1.slice(-10, -3)); //[5, 6, 9, 22, 32, 33, 44]
+```
+
+### 2、join
+
+> 连接所有数组元素组成一个字符串。
+
+**语法：**
+
+```js
+arr.join([separator]);
+```
+
+**参数说明：**
+
+-   separator：指定一个字符串来分隔数组的每个元素（默认：`,`）。
+
+**示例：**
+
+```js
+console.log(arr1.join()); // 1,2,444,444,4,5,5,6,9,22,32,33,44,66,9,22
+console.log(arr1.join("-")); // 1-2-444-444-4-5-5-6-9-22-32-33-44-66-9-22
+```
+
+### 3、toString
+
+> 返回一个由所有数组元素组合而成的字符串。
+
+**示例：**
+
+```js
+console.log(arr1.toString()); // 1,2,444,444,4,5,5,6,9,22,32,33,44,66,9,22
+```
+
+### 4、indexOf
+
+> 返回在数组中可以找到一个给定元素的第一个索引，如果不存在，则返回-1。
+
+**语法：**
+
+```js
+arr.indexOf(searchElement[, fromIndex])
+```
+
+**参数说明：**
+
+-   searchElement：需要查找的元素。
+-   fromIndex：开始查找的位置。
+    -   如果该索引值大于或等于数组长度，返回-1。
+    -   若果是负数，则表示从倒数第几位开始查找。
+
+**示例：**
+
+```js
+console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
+onsole.log(arr1.indexOf(444)); // 2
+```
+
+### 5、lastIndexOf
+
+> 数组中该元素最后一次出现的索引，如未找到返回-1。
+
+**语法：**
+
+```js
+arr.indexOf(searchElement[, fromIndex])
+```
+
+**参数说明：**
+
+-   searchElement：需要查找的元素。
+-   fromIndex：从此位置开始逆向查找。
+    -   如果该索引值大于或等于数组长度，整个数组都被查找。
+    -   若果是负数，则表示从倒数第几位开始查找。
+
+**示例：**
+
+```js
+console.log(arr1.lastIndexOf(444, -5)); // 3
+```
+
+### 6、concat
+
+> 返回一个由当前数组和其它若干个数组或者若干个非数组值组合而成的新数组（合并数组）。
+
+**语法：**
+
+```js
+var new_array = old_array.concat(value1[, value2[, ...[, valueN]]])
+```
+
+**参数说明：**
+
+-   value：数组或值，将被合并到一个新的数组中。
+    -   如果省略了 value 参数，则返回现存数组的一个浅拷贝。
+
+**示例：**
+
+```js
+console.log(arr1.concat(123, 335));
+// [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22, 123, 335]
+
+console.log(arr1.concat([45, 33]));
+// [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22, 45, 33]
+```
+
+### 7、includes
+
+> 判断当前数组是否包含某指定的值，如果是返回 true，否则返回 false。
+
+**语法：**
+
+```js
+arr.includes(valueToFind[, fromIndex])
+```
+
+**参数说明：**
+
+-   valueToFind：需要查找的元素。
+    -   比较字符串和字符时是区分大小写。
+-   fromIndex：从 fromIndex 索引处开始查找 valueToFind。
+    -   若果是负数，则从末尾开始往前跳 fromIndex 的绝对值个索引，然后往后搜寻。默认为 0。
+
+**示例：**
+
+```js
+console.log(arr1.concat([45, 33]));
+// [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22, 45, 33]
+console.log(arr1.includes(33, -10)); // true
+console.log(arr1.includes(3, -5)); // false
+```
+
+### 8、toLocaleString
+
+> 返回一个由所有数组元素组合而成的本地化后的字符串。
+
+**语法：**
+
+```js
+arr.toLocaleString([locales[,options]]);
+```
+
+**参数说明：**
+
+-   locales：带有 BCP 47 语言标记的字符串或字符串数组。
+    -   关于 locales 参数的形式与解释，请看 [Intl](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl) 页面。
+-   options：一个可配置属性的对象。
+    -   对于数字 [Number.prototype.toLocaleString()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString)。
+    -   对于日期 [Date.prototype.toLocaleString()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)。
+
+**示例：**
+
+```js
+console.log(
+    arr3.toLocaleString("zh", {
+        style: "currency",
+        currency: "CNY",
+    })
+);
+// ¥10.00,¥23.00,¥33.00
+console.log(
+    arr3.toLocaleString("zh", {
+        style: "percent",
+    })
+);
+// 1,000%,2,300%,3,300%
+```
+
+> currency：在货币格式化中使用的货币符号。
+> "USD" 表示美元, "EUR" 表示欧元, 或者 "CNY"是人民币；更多请参考 [Current currency & funds code list](https://www.currency-iso.org/en/home/tables/table-a1.html)。
+> 没有默认值，如果 style 是 “currency”，必须提 currency 属性。
+
+## 数组迭代方法
+
+### xx
+
+>
+
+**语法：**
+
+```js
+```
+
+**参数说明：**
+
+**示例：**
+
+```js
+```
+
+### xx
+
+>
+
+**语法：**
+
+```js
+```
+
+**参数说明：**
+
+**示例：**
+
+```js
+```
+
+### xx
+
+>
+
+**语法：**
+
+```js
+```
+
+**参数说明：**
+
+**示例：**
+
+```js
+```
+
+### xx
+
+>
+
+**语法：**
+
+```js
+```
+
+**参数说明：**
+
+**示例：**
+
+```js
+```
+
+### xx
+
+>
+
+**语法：**
+
+```js
+```
+
+**参数说明：**
+
+**示例：**
+
+```js
+```
+
+### xx
+
+>
+
+**语法：**
+
+```js
+```
+
+**参数说明：**
+
+**示例：**
+
+```js
+```

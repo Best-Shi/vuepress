@@ -57,13 +57,49 @@
 
             console.log(arr1.fill(444, 2, 4)); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
 
-            console.log("------------------------------");
             // console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
             // console.log(arr1.copyWithin(-5)); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 1, 2, 444, 444, 4]
             // console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
             // console.log(arr1.copyWithin(0, 5)); // [5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90, 33, 44, 66, 67, 90]
             console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
             console.log(arr1.copyWithin(-2, -8, -4)); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22]
+
+            console.log("------------------------------");
+
+            console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 67, 90]
+            console.log(arr1.slice(3, 10)); // [444, 4, 5, 5, 6, 9, 22]
+            console.log(arr1.slice(-10, -3)); //[5, 6, 9, 22, 32, 33, 44]
+
+            console.log(arr1.join()); // 1,2,444,444,4,5,5,6,9,22,32,33,44,66,9,22
+            console.log(arr1.join("-")); // 1-2-444-444-4-5-5-6-9-22-32-33-44-66-9-22
+
+            console.log(arr1.toString()); // 1,2,444,444,4,5,5,6,9,22,32,33,44,66,9,22
+
+            console.log(arr1.indexOf(444));
+
+            console.log(arr1.lastIndexOf(444, -5));
+
+            // console.log(arr1.concat(123, 335));
+            // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22, 123, 335]
+
+            console.log(arr1.concat([45, 33]));
+            // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22, 45, 33]
+
+            console.log(arr1.includes(3, -5));
+
+            let arr3 = [10, 23, 33];
+
+            console.log(
+                arr3.toLocaleString("zh", {
+                    style: "currency",
+                    currency: "CNY",
+                })
+            );
+            console.log(
+                arr3.toLocaleString("zh", {
+                    style: "percent",
+                })
+            );
         </script>
     </body>
 </html>
