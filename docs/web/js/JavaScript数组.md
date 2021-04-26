@@ -423,98 +423,279 @@ console.log(
 
 ## 数组迭代方法
 
-### xx
+### 1、forEach
 
->
-
-**语法：**
-
-```js
-```
-
-**参数说明：**
-
-**示例：**
-
-```js
-```
-
-### xx
-
->
+> 为数组中的每个元素执行一次回调函数。没有返回值。
 
 **语法：**
 
 ```js
+arr.forEach(callback(currentValue [, index [, array]])[, thisArg])
 ```
 
 **参数说明：**
 
+-   callback：为数组中每个元素执行的函数，该函数接收一至三个参数：
+    -   currentValue：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：可选参数。当执行回调函数 callback 时，用作 this 的值。
+
 **示例：**
 
 ```js
+arr1.forEach((item, index) => {
+    console.log(index, item);
+});
 ```
 
-### xx
+### 2、map
 
->
+> 返回一个由回调函数的返回值组成的新数组。
 
 **语法：**
 
 ```js
+var new_array = arr.map(function callback(currentValue[, index[, array]]) {
+ // Return element for new_array
+}[, thisArg])
 ```
 
 **参数说明：**
 
+-   callback：生成新数组元素的函数，使用三个参数：
+    -   currentValue：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：执行 callback 函数时值被用作 this。
+
 **示例：**
 
 ```js
+console.log(arr1); // [1, 2, 444, 444, 4, 5, 5, 6, 9, 22, 32, 33, 44, 66, 9, 22]
+let arr4 = arr1.map((item) => {
+    return item * 2;
+});
+console.log(arr4); // [2, 4, 888, 888, 8, 10, 10, 12, 18, 44, 64, 66, 88, 132, 18, 44]
 ```
 
-### xx
+### 3、filter
 
->
+> 将所有在过滤函数中返回 true 的数组元素放进一个新数组中并返回。
 
 **语法：**
 
 ```js
+var newArray = arr.filter(callback(element[, index[, array]])[, thisArg])
 ```
 
 **参数说明：**
 
+-   callback：用来测试数组的每个元素的函数。返回 true 表示该元素通过测试，保留该元素，false 则不保留。它接受以下三个参数：
+    -   element：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：执行 callback 函数时值被用作 this。
+
 **示例：**
 
 ```js
+let arr5 = arr4.filter((item) => {
+    return item > 50;
+});
+console.log(arr5); // [888, 888, 64, 66, 88, 132]
 ```
 
-### xx
+### 4、find
 
->
+> 找到第一个满足测试函数的元素并返回那个元素的值，如果找不到，则返回 undefined。
 
 **语法：**
 
 ```js
+var newArray = arr.find(callback(element[, index[, array]])[, thisArg])
 ```
 
 **参数说明：**
 
+-   callback：在数组每一项上执行的函数。它接受以下三个参数：
+    -   element：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：执行 callback 函数时值被用作 this。
+
 **示例：**
 
 ```js
+let res6 = arr4.find((item) => {
+    return item > 50;
+});
+console.log(res6); // 888
 ```
 
-### xx
+### 5、findIndex
 
->
+> 找到第一个满足测试函数的元素并返回那个元素的索引，如果找不到，则返回 -1。
 
 **语法：**
 
 ```js
+var newArray = arr.findIndex(callback(element[, index[, array]])[, thisArg])
 ```
 
 **参数说明：**
 
+-   callback：在数组每一项上执行的函数。它接受以下三个参数：
+    -   element：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：执行 callback 函数时值被用作 this。
+
 **示例：**
 
 ```js
+let res7 = arr4.findIndex((item) => item > 50);
+console.log(res7); // 2
+```
+
+### 6、every
+
+> 如果数组中的每个元素都满足测试函数，则返回 true，否则返回 false。
+
+**语法：**
+
+```js
+arr.every(callback(element[, index[, array]])[, thisArg])
+```
+
+**参数说明：**
+
+-   callback：用来测试每个元素的函数，它可以接收三个参数：
+    -   element：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：执行 callback 函数时值被用作 this。
+
+**示例：**
+
+```js
+console.log(arr5); // [888, 888, 64, 66, 88, 132, 'abc']
+let res = arr5.every((item) => {
+    return typeof item === "number";
+});
+console.log(res); // false
+```
+
+### 7、some
+
+> 如果数组中至少有一个元素满足测试函数，则返回 true，否则返回 false。
+
+**语法：**
+
+```js
+arr.some(callback(element[, index[, array]])[, thisArg])
+```
+
+**参数说明：**
+
+-   callback：用来测试每个元素的函数，它可以接收三个参数：
+    -   currentValue：当前元素。
+    -   index：当前元素的索引。
+    -   array：当前处理的数组。
+-   thisArg：执行 callback 函数时值被用作 this。
+
+**示例：**
+
+```js
+let res1 = arr5.some((item) => typeof item === "number");
+console.log(res1); // true
+```
+
+### 8、reduce
+
+> 从左到右为每个数组元素执行一次回调函数，并把上次回调函数的返回值放在一个暂存器中传给下次回调函数，并返回最后一次回调函数的返回值。
+
+**语法：**
+
+```js
+arr.reduce(callback(accumulator, currentValue[, index[, array]])[, initialValue])
+```
+
+**参数说明：**
+
+-   callback：执行数组中每个值 (如果没有提供 initialValue 则第一个值除外)的函数，包含四个参数：
+    -   accumulator：累计器累计回调的返回值; 它是上一次调用回调时返回的累积值，或 initialValue。
+    -   currentValue：数组中正在处理的元素。
+    -   index：数组中正在处理的当前元素的索引。 如果提供了 initialValue，则起始索引号为 0，否则从索引 1 起始。
+    -   array：调用 reduce()的数组。
+-   initialValue：作为第一次调用 callback 函数时的第一个参数的值。 如果没有提供初始值，则将使用数组中的第一个元素。 在没有初始值的空数组上调用 reduce 将报错。
+
+**示例：**
+
+```js
+// 数组求和
+let arr = [1, 3, 4, 4];
+let sum = arr.reduce((acc, cur) => acc + cur, 0);
+console.log(sum); // 12
+
+// 统计数组对象中的值
+let arr = [{ x: 1 }, { x: 5 }, { x: 9 }];
+let sum = arr.reduce((a, b) => a + b.x, 0);
+console.log(sum); // 15
+
+// 二维数组扁平化
+let arr = [
+    [1, 3],
+    [3, 3],
+    [4, 3],
+];
+let res = arr.reduce((a, b) => a.concat(b), []);
+console.log(res); //  [1, 3, 3, 3, 4, 3]
+
+// 统计元素出现的次数
+let names = ["Alice", "Bob", "Tiff", "Bruce", "Alice"];
+
+let res = names.reduce((a, b) => {
+    if (b in a) {
+        a[b]++;
+    } else {
+        a[b] = 1;
+    }
+    return a;
+}, {});
+console.log(res);
+```
+
+### 9、flat
+
+> 按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。
+
+**语法：**
+
+```js
+var newArray = arr.flat([depth]);
+```
+
+**参数说明：**
+
+-   depth：指定要提取嵌套数组的结构深度，默认值为 1。
+
+**示例：**
+
+```js
+let arr = [
+    [1, 3],
+    [3, 3],
+    [4, 3],
+];
+let res = arr.flat();
+console.log(res); //  [1, 3, 3, 3, 4, 3]
+
+let arr1 = [
+    [1, 3],
+    [3, 3],
+    [4, [3, 5]],
+];
+
+console.log(arr1.flat(2)); //  [1, 3, 3, 3, 4, 3, 5]
 ```
