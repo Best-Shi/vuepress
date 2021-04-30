@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>JavaScriptGenerator</title>
+    </head>
+
+    <body>
+        <script>
+            // function* gen() {
+            //     yield "一";
+            //     yield "二";
+            // }
+
+            // let gen_obj = gen();
+            // console.log(gen_obj.next());
+            // console.log(gen_obj.next());
+            // console.log(gen_obj.next());
+
+            // function* gen() {
+            //     let val = yield "hello";
+            //     console.log(val);
+            //     yield "world";
+            // }
+
+            // let g = gen();
+            // console.log(g.next());
+            // console.log(g.next("你好"));
+            // console.log(g.next());
+
+            // function* gen() {
+            //     try {
+            //         yield 20;
+            //     } catch (error) {
+            //         console.log(error); // 错误
+            //     }
+            // }
+
+            // let g = gen();
+            // console.log(g.next()); // {value: 20, done: false}
+            // console.log(g.throw(new Error("错误"))); // {value: undefined, done: true}
+
+            function* gen() {
+                yield "hello";
+                yield "world";
+                yield "123";
+            }
+
+            let g = gen();
+            console.log(g.next()); // {value: "hello", done: false}
+            console.log(g.return("aaa")); // {value: "aaa", done: true}
+            console.log(g.next()); // {value: undefined, done: true}
+        </script>
+    </body>
+</html>

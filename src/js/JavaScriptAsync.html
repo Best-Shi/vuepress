@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+
+    <body>
+        <script>
+            // let get = () => {
+            //     return new Promise((resolve, reject) => {
+            //         setTimeout(() => {
+            //             resolve("成功");
+            //         }, 2000);
+            //     });
+            // };
+
+            // async function fn() {
+            //     let res = await get();
+            //     console.log(res);
+            //     console.log(123);
+            // }
+
+            // fn();
+
+            setTimeout(() => {
+                console.log("setTimeout");
+            }, 0);
+            async function async1() {
+                console.log("async1 start");
+                await async2();
+                console.log("async1 end");
+            }
+
+            async function async2() {
+                console.log("async2");
+            }
+            console.log("script start");
+            async1();
+            console.log("script end");
+        </script>
+    </body>
+</html>

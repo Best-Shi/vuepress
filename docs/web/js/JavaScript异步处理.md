@@ -338,4 +338,149 @@ new Promise((resolve, reject) => {
 
 ## async await
 
+> async function 关键字用来在表达式中定义异步函数。
+> await 操作符用于等待一个 Promise 对象。它只能在异步函数 async function 中使用。
+
+**示例：**
+
+```js
+let get = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve("成功");
+        }, 2000);
+    });
+};
+
+async function fn() {
+    let res = await get();
+    console.log(res);
+    console.log(123);
+}
+
+fn();
+```
+
 ## generator
+
+> function\* 这种声明方式(function 关键字后跟一个星号）会定义一个生成器函数 (generator function)，它返回一个 Generator 对象。
+>
+> 生成器函数在执行时能暂停，后面又能从暂停处继续执行。
+
+**语法：**
+
+```js
+function* name([param[, param[, ... param]]]) { statements }
+```
+
+-   name：函数名。
+-   param：函数参数。
+-   statements：函数体。
+
+```js
+function* gen() {
+    yield "一";
+    yield "二";
+}
+
+let gen_obj = gen();
+console.log(gen_obj.next()); // {value: "一", done: false}
+console.log(gen_obj.next()); // {value: "二", done: false}
+console.log(gen_obj.next()); // {value: undefined, done: true}
+```
+
+**yield 语法：**
+
+```js
+[rv] = yield[expression];
+```
+
+-   expression：从生成器返回的值。
+-   rv：从 next()传入的值。
+
+### Generator.prototype.next()
+
+> 返回一个由 yield 表达式生成的值。包含属性 done 和 value 的对象。该方法也可以通过接受一个参数用以向生成器传值。
+
+```js
+function* gen() {
+    let val = yield "hello";
+    console.log(val); // 你好
+    yield "world";
+}
+
+let g = gen();
+console.log(g.next()); // {value: "hello", done: false}
+console.log(g.next("你好")); // {value: "world", done: false}
+console.log(g.next()); // {value: undefined, done: true}
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-30_20-38-11.jpg')">
+
+### Generator.prototype.return()
+
+> 返回给定的值并结束生成器。
+
+```js
+function* gen() {
+    yield "hello";
+    yield "world";
+    yield "123";
+}
+
+let g = gen();
+console.log(g.next()); // {value: "hello", done: false}
+console.log(g.return("aaa")); // {value: "aaa", done: true}
+console.log(g.next()); // {value: undefined, done: true}
+```
+
+### Generator.prototype.throw()
+
+> 向生成器抛出一个错误。
+
+```js
+function* gen() {
+    try {
+        yield 20;
+    } catch (error) {
+        console.log(error); // 错误
+    }
+}
+
+let g = gen();
+console.log(g.next()); // {value: 20, done: false}
+console.log(g.throw(new Error("错误"))); // {value: undefined, done: true}
+```
+
+<img :src="$withBase('/images/bestshi.com_2021-04-30_20-41-27.jpg')">
+
+## 金典面试题
+
+**写出下面代码答应顺序：**
+
+```js
+setTimeout(() => {
+    console.log("setTimeout");
+}, 0);
+async function async1() {
+    console.log("async1 start");
+    await async2();
+    console.log("async1 end");
+}
+
+async function async2() {
+    console.log("async2");
+}
+console.log("script start");
+async1();
+console.log("script end");
+```
+
+```js
+script start
+async1 start
+async2
+script end
+async1 end
+setTimeout
+```
