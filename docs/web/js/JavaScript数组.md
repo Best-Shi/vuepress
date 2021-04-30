@@ -7,7 +7,7 @@ tag:
     - 前端
 category: JavaScript
 prev: /web/js/
-next: false
+next: /web/js/JavaScript异步处理
 ---
 
 # JavaScript 数组
