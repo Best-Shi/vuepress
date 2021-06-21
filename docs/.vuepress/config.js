@@ -2,7 +2,7 @@ const { config } = require("vuepress-theme-hope");
 
 module.exports = config({
     title: "你好 Best Shi",
-    base: "/blog/",
+    base: "/vuepress/",
     themeConfig: {
         author: "Best Shi",
         baseLang: "zh-CN",
